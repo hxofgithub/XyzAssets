@@ -65,7 +65,7 @@ namespace XyzAssets.Editor
 
         public string SerializeToJson()
         {
-            return Newtonsoft.Json.JsonConvert.SerializeObject(this);
+            return UnityEngine.JsonUtility.ToJson(this);
         }
 
         #endregion

@@ -1,0 +1,10 @@
+{
+"name": "com.xyz.assets",
+"displayName": "XyzAssets",
+"description": "Resources Manager",
+"version": "1.0.0",
+"unity": "2020.3",
+"license": "MIT",
+"dependencies": {
+ }
+}

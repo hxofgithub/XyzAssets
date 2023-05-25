@@ -1,10 +1,8 @@
 {
-"name": "com.xyz.assets",
-"displayName": "XyzAssets",
-"description": "Resources Manager",
-"version": "1.0.1",
-"unity": "2020.3",
-"license": "MIT",
-"dependencies": {
- }
+  "name": "com.xyz.xyzassets",
+  "displayName": "XyzAssets",
+  "version": "1.0.2",
+  "unity": "2022.2",
+  "description": "\u8d44\u6e90\u6253\u5305\u3001\u52a0\u8f7d\u4e00\u4f53\u5316\u5de5\u5177\u3002\u53c2\u8003Samples\u4f8b\u5b50\u3002\n\nResources and AssetBundle Tools.",
+  "author": "xyz"
 }

@@ -1,0 +1,11 @@
+{
+    "name": "Undefined.Xyzassets.Tests",
+    "references": [
+        "Undefined.Xyzassets"
+    ],
+    "optionalUnityReferences": [
+        "TestAssemblies"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": []
+}

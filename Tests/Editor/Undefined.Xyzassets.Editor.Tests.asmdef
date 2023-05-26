@@ -1,0 +1,14 @@
+{
+    "name": "Undefined.Xyzassets.Editor.Tests",
+    "references": [
+        "Undefined.Xyzassets.Editor",
+        "Undefined.Xyzassets"
+    ],
+    "optionalUnityReferences": [
+        "TestAssemblies"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": []
+}

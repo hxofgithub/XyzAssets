@@ -1,8 +1,8 @@
 {
   "name": "com.xyz.xyzassets",
   "displayName": "XyzAssets",
-  "version": "1.0.2",
-  "unity": "2022.2",
+  "version": "1.0.5",
+  "unity": "2019.1",
   "description": "资源打包、加载一体化工具。参考Samples例子。\n\nResources and AssetBundle Tools.",
   "author": "xyz",
   "publishConfig": {

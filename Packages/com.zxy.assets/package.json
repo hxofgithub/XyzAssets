@@ -1,11 +1,8 @@
 {
   "name": "com.xyz.xyzassets",
   "displayName": "XyzAssets",
-  "version": "1.0.5",
+  "version": "1.0.10",
   "unity": "2019.1",
-  "description": "资源打包、加载一体化工具。参考Samples例子。\n\nResources and AssetBundle Tools.",
-  "author": "xyz",
-  "publishConfig": {
-    "registry": "https://package.openupm.com"
-  }
+  "description": "\u8d44\u6e90\u6253\u5305\u3001\u52a0\u8f7d\u4e00\u4f53\u5316\u5de5\u5177\u3002\u53c2\u8003Samples\u4f8b\u5b50\u3002\n\nResources and AssetBundle Tools.",
+  "author": "xyz"
 }

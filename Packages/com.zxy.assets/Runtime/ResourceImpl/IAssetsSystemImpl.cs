@@ -16,8 +16,6 @@ namespace XyzAssets.Runtime
 
         ExtractResourcesOperator ExtractResources(string extractPath, string[] modeNames);
 
-        void SetBundleWrapFunc(Func<string, string> wrapFunc);
-
         void Dispose();
     }
 }

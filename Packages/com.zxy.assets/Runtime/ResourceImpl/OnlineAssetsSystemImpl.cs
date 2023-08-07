@@ -8,10 +8,6 @@ namespace XyzAssets.Runtime
     internal sealed class OnlineAssetsSystemImpl : IAssetsSystemImpl
     {
         #region public methods
-        public void SetBundleWrapFunc(Func<string, string> wrapFunc)
-        {
-            m_BundleWrapFunc = wrapFunc;
-        }
         public ExtractResourcesOperator ExtractResources(string extractPath, string[] modeNames)
         {
             var bundleInfos = GetBundleInfos(modeNames);
@@ -32,8 +28,13 @@ namespace XyzAssets.Runtime
         public InitializeOperator Initialize(InitializeParameters initializeParameters)
         {
             var onlineParams = initializeParameters as OnlineInitializeParameters;
+
+            if (onlineParams.PlayModeService == null)
+                throw new ArgumentNullException("PlayModeService");
+
             m_PlayModeService = onlineParams.PlayModeService;
             m_GameDecryptService = onlineParams.DecryptService;
+            m_BundleWrapFunc = m_PlayModeService.GetCorrectBundleName;
             var op = new OnlineInitializeOperator(this, onlineParams);
             return op;
         }

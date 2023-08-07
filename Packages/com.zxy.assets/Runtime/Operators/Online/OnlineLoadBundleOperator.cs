@@ -128,6 +128,7 @@ namespace XyzAssets.Runtime
                 {
                     m_Step = EStep.DownloadFromRemote;
                     m_DownloadOperator = new OnlineDownloadOperator(m_Impl, new BundleInfo[] { m_BundleInfo });
+                    m_DownloadOperator.BeginDownload();
                 }
                 else
                 {

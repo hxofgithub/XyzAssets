@@ -1,0 +1,10 @@
+{
+    "name": "Xiongchuan1921.ComZxyAnticheat.Editor",
+    "references": [
+      "Xiongchuan1921.ComZxyAnticheat"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": []
+}

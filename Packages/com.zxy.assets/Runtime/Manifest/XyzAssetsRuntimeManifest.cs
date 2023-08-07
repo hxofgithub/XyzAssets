@@ -1,12 +1,12 @@
 ﻿namespace XyzAssets.Runtime
 {
-    public enum BundleFileNameType
+    public enum BundleFileNameType : byte
     {
         BundleName,
         Hash,
     }
 
-    public enum BundleEncryptType
+    public enum BundleEncryptType : byte
     {
         FileOffset,
         Stream,

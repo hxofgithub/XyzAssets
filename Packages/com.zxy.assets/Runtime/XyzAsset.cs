@@ -44,11 +44,6 @@ namespace XyzAssets.Runtime
             return initializeOperator;
         }
 
-        public static void SetBundleWrapFunc(Func<string, string> wrapFunc)
-        {
-            m_Impl.SetBundleWrapFunc(wrapFunc);
-        }
-
         public static UpdateManifestOperator UpdateManifest()
         {
             ThrowImplIsNull();

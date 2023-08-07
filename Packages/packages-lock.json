@@ -129,6 +129,13 @@
       },
       "url": "https://packages.unity.com"
     },
+    "com.unity.scriptablebuildpipeline": {
+      "version": "1.19.6",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://packages.unity.com"
+    },
     "com.unity.services.core": {
       "version": "1.0.1",
       "depth": 1,
@@ -188,6 +195,24 @@
         "com.unity.package-validation-suite": "0.7.10-preview"
       },
       "url": "https://packages.unity.com"
+    },
+    "com.xyz.localization": {
+      "version": "file:com.xiongchuan1921.comxyzlocalization",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
+    "com.xyz.xyzassets": {
+      "version": "file:com.zxy.assets",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
+    "com.zxy.anticheat": {
+      "version": "file:com.zxy.anticheat",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
     },
     "nuget.mono-cecil": {
       "version": "0.1.6-preview",

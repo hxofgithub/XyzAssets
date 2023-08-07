@@ -2,58 +2,135 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
-
-[CreateAssetMenu(fileName = "AssetBundlePackageEditorSetting", menuName = "Create AssetBundlePackageEditorSetting")]
-public class AssetBundlePackageEditorSetting : ScriptableObject
+using XyzAssets.Editor;
+using UnityEditor;
+namespace XyzAssets.Editor
 {
-    [System.Serializable]
-    public class PackageBundles
+
+    [CreateAssetMenu(fileName = "AssetBundlePackageEditorSetting", menuName = "Create AssetBundlePackageEditorSetting")]
+    public class AssetBundlePackageEditorSetting : ScriptableObject
     {
-        public string ModeName;
-        public bool CopyToStreamingAssets;
-        public string[] Bundles;
-    }
-    [SerializeField]
-    private string m_BuildOutputPath = "Output/";
-    public string VariantName = string.Empty;
-    public string ManifestName = "StreamingAssets";
-
-    public BundleEncryptType EncryptType = BundleEncryptType.None;
-
-
-
-    public BundleFileNameType BundleNameType;
-
-
-    public string BuildOutputPath
-    {
-        get { return m_BuildOutputPath + ManifestName; }
-    }
-
-
-
-    [FormerlySerializedAs("m_Packages")]
-    public PackageBundles[] Packages;
-
-    private void OnValidate()
-    {
-        if (Packages == null) return;
-
-        List<string> bundleNames = new List<string>();
-
-        foreach (var item in Packages)
+        [System.Serializable]
+        public class PackageBundles
         {
-            for (int i = 0; i < item.Bundles.Length; i++)
+            public string ModeName;
+            public bool CopyToStreamingAssetsPath;
+
+            public AssetBundleDatas[] Bundles;
+        }
+
+
+        [System.Serializable]
+        public struct AssetBundleDatas
+        {
+            public string BundleName;
+            public string VariantName;
+            [UnityObjectSelector]
+            public string[] AssetPaths;
+        }
+
+
+
+        [SerializeField]
+        private string m_BuildOutputPath = "Output/";
+
+        public string ManifestName = "StreamingAssets";
+
+        [TypeSelector(typeof(IGameEncryptService))]
+        public string EncryptService;
+
+        public BundleFileNameType BundleNameType;
+
+
+        [FormerlySerializedAs("m_Packages")]
+        public PackageBundles[] Packages;
+
+
+        public string BuildOutputPath
+        {
+            get { return System.IO.Path.Combine(m_BuildOutputPath, "Output", ManifestName); }
+        }
+
+        public string EncryptPath
+        {
+            get { return System.IO.Path.Combine(m_BuildOutputPath, "Encrypt"); }
+        }
+    }
+
+
+    [CustomEditor(typeof(AssetBundlePackageEditorSetting))]
+    public class AssetBundlePackageEditorSettingEditor : UnityEditor.Editor
+    {
+        AssetBundlePackageEditorSetting m_Target;
+
+        private void OnEnable()
+        {
+            m_Target = target as AssetBundlePackageEditorSetting;
+        }
+
+        public override void OnInspectorGUI()
+        {
+            Check();
+            base.OnInspectorGUI();
+        }
+
+        private void Check()
+        {
+            if (m_Target.Packages == null) return;
+
+            List<string> bundleNames = new List<string>();
+
+            string errorMsg = null;
+
+            for (int p = 0; p < m_Target.Packages.Length; p++)
             {
-                item.Bundles[i] = item.Bundles[i].ToLower();
-                if (bundleNames.IndexOf(item.Bundles[i]) != -1)
+                var item = m_Target.Packages[p];
+                if (string.IsNullOrEmpty(item.ModeName))
                 {
-                    Debug.LogError($"Dumplicate Bundle Name:{item.Bundles[i]}, Index:{i}");
+                    errorMsg = $"Package Mode name is null or empty. Index: {p} ";
+                    break;
                 }
-                else
-                    bundleNames.Add(item.Bundles[i]);
+                for (int i = 0; i < item.Bundles.Length; i++)
+                {
+                    if (item.Bundles[i].AssetPaths != null)
+                    {
+                        for (int v = 0; v < item.Bundles[i].AssetPaths.Length; v++)
+                        {
+                            var fullName = item.Bundles[i].AssetPaths[v];
+                            fullName = fullName.ToLower();
+
+                            if (bundleNames.IndexOf(fullName) != -1)
+                            {
+                                errorMsg = $"Dumplicate Bundle Name:{item.Bundles[i]}, ModeName:{item.ModeName}, Index:{i}";
+                                break;
+                            }
+                            else
+                                bundleNames.Add(fullName);
+                        }
+                    }
+                    else
+                    {
+                        var fullName = item.Bundles[i].BundleName;
+                        fullName = fullName.ToLower();
+
+                        if (bundleNames.IndexOf(fullName) != -1)
+                        {
+                            errorMsg = $"Dumplicate Bundle Name:{item.Bundles[i]}, ModeName:{item.ModeName}, Index:{i}";
+                            break;
+                        }
+                        else
+                            bundleNames.Add(fullName);
+                    }
+                }
+                if (!string.IsNullOrEmpty(errorMsg))
+                    break;
+            }
+            if (!string.IsNullOrEmpty(errorMsg))
+            {
+                EditorGUILayout.HelpBox(errorMsg, MessageType.Error);
             }
         }
+
     }
 
 }

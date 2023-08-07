@@ -105,6 +105,8 @@ namespace XyzAssets.Runtime
             }
             m_OnlineParameters = null;
 
+            //Debug.Log("-----OnlineInitializeOperator Dispose");
+
             m_Impl = null;
         }
 

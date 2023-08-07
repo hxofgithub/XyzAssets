@@ -1,0 +1,10 @@
+{
+    "name": "Xiongchuan1921.ComXyzLocalization.Editor",
+    "references": [
+      "Xiongchuan1921.ComXyzLocalization"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": []
+}

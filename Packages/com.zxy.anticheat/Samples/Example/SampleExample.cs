@@ -5,7 +5,7 @@
 //
 // -----------------------------------------------------------------------------
 
-namespace Undefined.Xyzassets
+namespace Xiongchuan1921.ComZxyAnticheat
 {
     /// <summary>
     /// Provide a general description of the public class.

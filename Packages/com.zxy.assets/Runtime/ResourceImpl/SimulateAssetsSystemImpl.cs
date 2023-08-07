@@ -54,12 +54,6 @@ namespace XyzAssets.Runtime
         {
             return new SimulateLoadSceneOperator(new AssetInfo() { AssetPath = scenePath }, sceneMode);
         }
-
-        void IAssetsSystemImpl.SetBundleWrapFunc(Func<string, string> wrapFunc)
-        {
-
-        }
-
         UpdateManifestOperator IAssetsSystemImpl.UpdateManifest()
         {
             return new SimulateUpdateManifestOperator();

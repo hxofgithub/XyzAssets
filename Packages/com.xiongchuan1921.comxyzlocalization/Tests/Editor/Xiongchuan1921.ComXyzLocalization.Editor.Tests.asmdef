@@ -1,0 +1,14 @@
+{
+    "name": "Xiongchuan1921.ComXyzLocalization.Editor.Tests",
+    "references": [
+        "Xiongchuan1921.ComXyzLocalization.Editor",
+        "Xiongchuan1921.ComXyzLocalization"
+    ],
+    "optionalUnityReferences": [
+        "TestAssemblies"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": []
+}

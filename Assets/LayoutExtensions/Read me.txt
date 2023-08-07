@@ -1,0 +1,28 @@
+<BR><STRONG>Solve GC and CPU consumption caused by multiple Instantiate and Destroy in UGUI-ScrollView.</STRONG>
+
+<BR><STRONG>--Component: XGridLayoutGroup--</STRONG>
+<BR>This is a variant of GridLayout.It is not allowed to modify the size of the cell.
+<BR><STRONG>--How to use it?--</STRONG>
+<BR>Add XGridLayoutGroup to the Content of ScrollRect.
+<BR>Change custom properties.
+<BR>Call XGridLayoutGroup.SetInitData(int totalSize, XLayoutEvents layevents);
+<BR>Call XGridLayoutGroup.BeginUpdate(bool forceUpdate);
+
+<BR><STRONG>--Component: XVerticalLayoutGroup--</STRONG>
+<BR>This is a extension of VerticalLayoutGroup. It allow change cell size.
+<BR><STRONG>--How to use it?--</STRONG>
+<BR>Add XVerticalLayoutGroup to the Content of ScrollRect.
+<BR>Change custom properties.
+<BR>Call XLayoutGroup.SetInitData(int cellSize, int totalSize, XLayoutEvents layevents);
+<BR><STRONG>--How to change cell size?--</STRONG>
+<BR>Call XLayoutGroup.ChangeCellSize(int index, float newSize).It will re-calculate cell size immediately.
+
+
+<BR><STRONG>--Component: XHorizontalLayoutGroup--</STRONG>
+<BR>This is a extension of HorizontalLayoutGroup. It allow change cell size.
+<BR><STRONG>--How to use it?--</STRONG>
+<BR>Add XHorizontalLayoutGroup to the Content of ScrollRect.
+<BR>Change custom properties.
+<BR>Call XLayoutGroup.SetInitData(int cellSize, int totalSize, XLayoutEvents layevents);
+<BR><STRONG>--How to change cell size?--</STRONG>
+<BR>Call XLayoutGroup.ChangeCellSize(int index, float newSize).It will re-calculate cell size immediately.

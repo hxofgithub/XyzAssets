@@ -26,7 +26,7 @@ namespace XyzAssets.Runtime
 
     public static class XyzAssetUtils
     {
-        [ThreadStatic]
+        //[ThreadStatic]
         private static readonly StringBuilder _sharedStringBuilder = new StringBuilder(1024);
         private static readonly MD5 m_SharedHashProvider = new MD5CryptoServiceProvider();
 
@@ -47,7 +47,8 @@ namespace XyzAssets.Runtime
             }
             catch (Exception ex)
             {
-                Debug.LogError("md5file() fail :" + file);
+                Debug.LogError($"md5file() fail :{file} \n{ex.Message}\n{ex.StackTrace}");
+
                 throw ex;
             }
         }

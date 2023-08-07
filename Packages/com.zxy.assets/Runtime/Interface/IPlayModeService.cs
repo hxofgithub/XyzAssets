@@ -13,15 +13,6 @@ namespace XyzAssets.Runtime
         string[] ResUrls { get; }
 
         int MaxRetryTimes { get; }
-        event Func<string, string> ReplaceBundleNameFunc;
 
     }
-
-    public interface IGameDecryptService
-    {
-        int GetFileOffset(string bundleName);
-        Stream GetDecryptStream(string bundleName);
-        Stream GetEncryptStream(string bundleName);
-    }
-
 }

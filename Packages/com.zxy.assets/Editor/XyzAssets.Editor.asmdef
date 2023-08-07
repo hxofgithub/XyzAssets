@@ -2,7 +2,7 @@
     "name": "XyzAssets.Editor",
     "rootNamespace": "",
     "references": [
-        "GUID:d13a1a3bbb4740743b44e18a8782befc"
+        "GUID:518a96feb739ed9418674c2a9f7a8ebe"
     ],
     "includePlatforms": [
         "Editor"

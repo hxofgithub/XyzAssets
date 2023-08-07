@@ -3,7 +3,7 @@ namespace XyzAssets.Runtime
 {
     public static class ManifestExtensions
     {
-        public static void ConnectHandlerToObject<T>(this ResourceBaseOperator handler, T target) where T : UnityEngine.Object
+        public static void ConnectHandlerToObject<T>(this AsyncOperationBase handler, T target) where T : UnityEngine.Object
         {
             ThrowIfNull(handler);
             ThrowIfNull(target);

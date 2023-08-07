@@ -15,7 +15,7 @@ namespace XyzAssets.Runtime
         protected override void OnStart()
         {
             if (m_BundleInfos == null || m_BundleInfos.Length == 0)
-                Status = OperatorStatus.Success;
+                Status = EOperatorStatus.Success;
             else
             {
                 XyzAssetPathHelper.ExternalPath = m_ExtractRootPath;
@@ -37,7 +37,7 @@ namespace XyzAssets.Runtime
                 }
                 if (m_ExtractIndex == -1)
                 {
-                    Status = OperatorStatus.Success;
+                    Status = EOperatorStatus.Success;
                 }
             }
         }
@@ -59,7 +59,7 @@ namespace XyzAssets.Runtime
 
                     if (m_ExtractIndex == m_BundleInfos.Length)
                     {
-                        Status = OperatorStatus.Success;
+                        Status = EOperatorStatus.Success;
 
                         m_WebRequest.Dispose();
                         m_WebRequest = null;
@@ -80,7 +80,7 @@ namespace XyzAssets.Runtime
                 else
                 {
                     Error = StringUtility.Format("Extract Failed: {0}", m_WebRequest.error);
-                    Status = OperatorStatus.Failed;
+                    Status = EOperatorStatus.Failed;
                 }
             }
             else
@@ -99,7 +99,7 @@ namespace XyzAssets.Runtime
 
                 if (m_ExtractIndex == m_BundleInfos.Length)
                 {
-                    Status = OperatorStatus.Success;
+                    Status = EOperatorStatus.Success;
                 }
             }
         }

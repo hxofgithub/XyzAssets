@@ -15,7 +15,6 @@
     "com.unity.textmeshpro": "3.0.6",
     "com.unity.timeline": "1.4.8",
     "com.unity.ugui": "1.0.0",
-    "com.unity.upm.develop": "0.2.0-preview",
     "com.unity.modules.ai": "1.0.0",
     "com.unity.modules.androidjni": "1.0.0",
     "com.unity.modules.animation": "1.0.0",
@@ -46,16 +45,16 @@
     "com.unity.modules.video": "1.0.0",
     "com.unity.modules.vr": "1.0.0",
     "com.unity.modules.wind": "1.0.0",
-    "com.unity.modules.xr": "1.0.0"
+    "com.unity.modules.xr": "1.0.0",
+    "com.tuyoogame.yooasset": "1.5.3-preview"
   },
   "scopedRegistries": [
     {
-      "name": "package.openupm.com",
-      "url": "https://package.openupm.com",
+      "name": "package.openupm.cn",
+      "url": "https://package.openupm.cn",
       "scopes": [
         "com.openupm",
-        "jp.setchi.fancyscrollview",
-        "me.qiankanglai.loopscrollrect"
+        "com.tuyoogame.yooasset"
       ]
     }
   ]

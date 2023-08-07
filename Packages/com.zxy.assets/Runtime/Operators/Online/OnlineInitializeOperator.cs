@@ -48,7 +48,7 @@ namespace XyzAssets.Runtime
                     m_WebRequestAsync.Dispose();
                     m_WebRequestAsync = null;
 
-                    Status = OperatorStatus.Failed;
+                    Status = EOperatorStatus.Failed;
                 }
 
             }
@@ -81,7 +81,7 @@ namespace XyzAssets.Runtime
                     if (m_OnlineParameters == null || m_Impl.GetModeService().ResUrls == null || m_Impl.GetModeService().ResUrls.Length == 0)
                     {
                         Error = $"InitParameters data error. ResUrls is null";
-                        Status = OperatorStatus.Failed;
+                        Status = EOperatorStatus.Failed;
                     }
                     else
                     {
@@ -115,7 +115,7 @@ namespace XyzAssets.Runtime
             if (binary == null || binary.Length == 0)
             {
                 Error = "Binary Data is null";
-                Status = OperatorStatus.Failed;
+                Status = EOperatorStatus.Failed;
             }
             else
             {
@@ -128,12 +128,12 @@ namespace XyzAssets.Runtime
 
                     File.WriteAllBytes(path, binary);
                     m_Impl.SetActiveManifest(manifest);
-                    Status = OperatorStatus.Success;
+                    Status = EOperatorStatus.Success;
                 }
                 catch (System.Exception e)
                 {
                     Error = e.Message;
-                    Status = OperatorStatus.Failed;
+                    Status = EOperatorStatus.Failed;
                     throw;
                 }
             }

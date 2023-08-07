@@ -37,7 +37,7 @@ namespace XyzAssets.Runtime
                 else
                 {
                     Error = StringUtility.Format("Failed to load scene: {0}", m_AssetInfo.AssetPath);
-                    Status = OperatorStatus.Failed;
+                    Status = EOperatorStatus.Failed;
                     m_Step = LoadSceneStep.None;
                 }
             }
@@ -52,13 +52,13 @@ namespace XyzAssets.Runtime
             {
                 if (m_SceneObject.IsValid())
                 {
-                    Status = OperatorStatus.Success;
+                    Status = EOperatorStatus.Success;
                     SceneManager.SetActiveScene(m_SceneObject);
                 }
                 else
                 {
                     Error = StringUtility.Format("The loaded scene is invalid : {0}", m_AssetInfo.AssetPath);
-                    Status = OperatorStatus.Failed;
+                    Status = EOperatorStatus.Failed;
                 }
 
                 m_Step = LoadSceneStep.Done;

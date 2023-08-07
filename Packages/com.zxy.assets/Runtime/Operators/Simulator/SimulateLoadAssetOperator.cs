@@ -15,10 +15,10 @@ namespace XyzAssets.Runtime
             if (AssetObject == null)
             {
                 Error = StringUtility.Format("Asset Load Error: {0}", m_AssetInfo.AssetPath);
-                Status = OperatorStatus.Failed;
+                Status = EOperatorStatus.Failed;
             }
             else
-                Status = OperatorStatus.Success;
+                Status = EOperatorStatus.Success;
 
 #endif
         }

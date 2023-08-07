@@ -1,6 +1,6 @@
 ﻿namespace XyzAssets.Runtime
 {
-    public abstract class ExtractResourcesOperator : ResourceBaseOperator
+    public abstract class ExtractResourcesOperator : AsyncOperationBase
     {
         internal ExtractResourcesOperator(string extractPath, BundleInfo[] bundleInfos)
         {

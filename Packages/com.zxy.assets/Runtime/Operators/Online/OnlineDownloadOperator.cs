@@ -34,7 +34,7 @@ namespace XyzAssets.Runtime
             m_CurrentDownloadedBytes = 0;
             if (m_BundleInfos == null || m_BundleInfos.Length == 0)
             {
-                Status = OperatorStatus.Success;
+                Status = EOperatorStatus.Success;
             }
             else
             {
@@ -80,7 +80,7 @@ namespace XyzAssets.Runtime
                         m_WebRequest = null;
 
                         Error = StringUtility.Format("Downloaded file:{0} hash is error.", bundleName);
-                        Status = OperatorStatus.Failed;
+                        Status = EOperatorStatus.Failed;
                     }
                     else
                     {
@@ -108,7 +108,7 @@ namespace XyzAssets.Runtime
                     if (++m_RetryTimes >= m_MaxRetryTimes)
                     {
                         Error = StringUtility.Format("Download Bundle Error: {0}", m_WebRequest.error);
-                        Status = OperatorStatus.Failed;
+                        Status = EOperatorStatus.Failed;
                         return;
                     }
 
@@ -122,7 +122,7 @@ namespace XyzAssets.Runtime
             }
             else if (m_Step == DownloadStep.Completed)
             {
-                Status = OperatorStatus.Success;
+                Status = EOperatorStatus.Success;
             }
 
         }

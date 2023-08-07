@@ -7,22 +7,22 @@ namespace XyzAssets.Runtime
         public IPlayModeService PlayModeService;
         public IGameDecryptService DecryptService;
     }
-    public abstract class InitializeOperator : ResourceBaseOperator
+    public abstract class InitializeOperator : AsyncOperationBase
     {
         public event Action<InitializeOperator> OnComplete;
 
-        public override OperatorStatus Status
+        public override EOperatorStatus Status
         {
             get => base.Status;
             protected set
             {
                 base.Status = value;
-                if (OnComplete != null && value == OperatorStatus.Success && !m_IsDisposed)
+                if (OnComplete != null && value == EOperatorStatus.Success && !m_IsDisposed)
                 {
                     OnComplete(this);
                     OnComplete = null;
                 }
-                if (value == OperatorStatus.Failed)
+                if (value == EOperatorStatus.Failed)
                     XyzLogger.LogError(Error);
             }
         }

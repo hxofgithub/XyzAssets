@@ -2,22 +2,22 @@
 
 namespace XyzAssets.Runtime
 {
-    public abstract class UpdateManifestOperator : ResourceBaseOperator
+    public abstract class UpdateManifestOperator : AsyncOperationBase
     {
         public event Action<UpdateManifestOperator> OnComplete;
 
-        public override OperatorStatus Status
+        public override EOperatorStatus Status
         {
             get => base.Status;
             protected set
             {
                 base.Status = value;
-                if (OnComplete != null && value == OperatorStatus.Success && !m_IsDisposed)
+                if (OnComplete != null && value == EOperatorStatus.Success && !m_IsDisposed)
                 {
                     OnComplete(this);
                     OnComplete = null;
                 }
-                if (value == OperatorStatus.Failed)
+                if (value == EOperatorStatus.Failed)
                     XyzLogger.LogError(Error);
             }
         }

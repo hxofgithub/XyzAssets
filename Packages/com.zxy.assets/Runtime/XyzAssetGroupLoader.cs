@@ -4,7 +4,7 @@ using UObject = UnityEngine.Object;
 
 namespace XyzAssets.Runtime
 {
-    public class XyzAssetGroupLoader : ResourceBaseOperator
+    public class XyzAssetGroupLoader : AsyncOperationBase
     {
         public event System.Action OnComplete;
         internal XyzAssetGroupLoader() { }
@@ -17,13 +17,13 @@ namespace XyzAssets.Runtime
             return null;
 
         }
-        public override OperatorStatus Status
+        public override EOperatorStatus Status
         {
             get => base.Status;
             protected set
             {
                 base.Status = value;
-                if (OnComplete != null && value == OperatorStatus.Success)
+                if (OnComplete != null && value == EOperatorStatus.Success)
                 {
                     OnComplete();
                     OnComplete = null;
@@ -75,7 +75,7 @@ namespace XyzAssets.Runtime
             m_TotalNeedLoadCnt = m_AssetPathList.Count;
             m_CurrentLoadCnt = 0;
             m_result = new Dictionary<string, UObject>(m_TotalNeedLoadCnt);
-            m_AssetLoadOperatorDict = new List<ResourceBaseOperator>(m_TotalNeedLoadCnt);
+            m_AssetLoadOperatorDict = new List<AsyncOperationBase>(m_TotalNeedLoadCnt);
             foreach (var item in m_AssetPathList)
             {
                 var ope = XyzAsset.LoadAssetAsync(item.Key, item.Value);
@@ -90,7 +90,7 @@ namespace XyzAssets.Runtime
             m_CurrentLoadCnt++;
             if (m_CurrentLoadCnt == m_TotalNeedLoadCnt)
             {
-                Status = OperatorStatus.Success;
+                Status = EOperatorStatus.Success;
             }
         }
         private string GetKey(System.Type type, string name)
@@ -121,7 +121,7 @@ namespace XyzAssets.Runtime
 
         private bool m_IsBegin = false;
         private readonly Dictionary<string, System.Type> m_AssetPathList = new Dictionary<string, System.Type>(32);
-        private List<ResourceBaseOperator> m_AssetLoadOperatorDict;
+        private List<AsyncOperationBase> m_AssetLoadOperatorDict;
         private Dictionary<string, UObject> m_result;
         private int m_TotalNeedLoadCnt, m_CurrentLoadCnt;
     }

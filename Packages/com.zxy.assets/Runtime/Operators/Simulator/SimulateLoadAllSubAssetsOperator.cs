@@ -36,7 +36,7 @@ namespace XyzAssets.Runtime
                 if (obj == null)
                 {
                     Error = StringUtility.Format("Failed Load:{0} - {1}", data.Key, data.Value);
-                    Status = OperatorStatus.Failed;
+                    Status = EOperatorStatus.Failed;
                 }
                 else
                 {
@@ -46,7 +46,7 @@ namespace XyzAssets.Runtime
             }
             else
             {
-                Status = OperatorStatus.Success;
+                Status = EOperatorStatus.Success;
             }
 
 #endif
@@ -68,7 +68,7 @@ namespace XyzAssets.Runtime
         {
 #if UNITY_EDITOR
             if (m_WaitLoadValuPairs == null || m_WaitLoadValuPairs.Count == 0)
-                Status = OperatorStatus.Success;
+                Status = EOperatorStatus.Success;
             else
             {
                 m_TotalNeedLoadCnt = m_WaitLoadValuPairs.Count;

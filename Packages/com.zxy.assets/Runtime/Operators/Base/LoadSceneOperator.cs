@@ -2,7 +2,7 @@
 using UnityEngine;
 namespace XyzAssets.Runtime
 {
-    public abstract class LoadSceneOperator : ResourceBaseOperator
+    public abstract class LoadSceneOperator : AsyncOperationBase
     {
 
         internal LoadSceneOperator(AssetInfo assetInfo, LoadSceneMode sceneMode)

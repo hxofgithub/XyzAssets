@@ -235,7 +235,7 @@ namespace XyzAssets.Runtime
             if (m_LoadBundleOperator.ContainsKey(bundleId))
             {
                 var op = m_LoadBundleOperator[bundleId];
-                if (op.Status == OperatorStatus.Success)
+                if (op.Status == EOperatorStatus.Success)
                 {
                     m_BundleRef[bundleId] -= 1;
                     if (m_BundleRef[bundleId] <= 0)
@@ -245,7 +245,7 @@ namespace XyzAssets.Runtime
                         op.Dispose();
                     }
                 }
-                else if (op.Status == OperatorStatus.None)
+                else if (op.Status == EOperatorStatus.None)
                 {
                     var _id = bundleId;
                     op.OnComplete += (handler) =>

@@ -17,12 +17,12 @@ namespace XyzAssets.Runtime
             ExtractFormStreamingAssetPath,
         }
 
-        public override OperatorStatus Status
+        public override EOperatorStatus Status
         {
             get => base.Status;
             protected set
             {
-                if (value == OperatorStatus.Success)
+                if (value == EOperatorStatus.Success)
                     XyzLogger.LogWarning(StringUtility.Format("-------[Load Bundle]: {0}", m_BundleInfo.BundleName));
 
                 base.Status = value;
@@ -78,14 +78,14 @@ namespace XyzAssets.Runtime
 
                 if (!m_ExtractOpera.IsDone) return;
 
-                if (m_ExtractOpera.Status == OperatorStatus.Success)
+                if (m_ExtractOpera.Status == EOperatorStatus.Success)
                 {
                     m_Step = EStep.WaitAssetBundleRequest;
                 }
                 else
                 {
                     Error = m_ExtractOpera.Error;
-                    Status = OperatorStatus.Failed;
+                    Status = EOperatorStatus.Failed;
                 }
                 m_ExtractOpera.Dispose();
                 m_ExtractOpera = null;
@@ -96,7 +96,7 @@ namespace XyzAssets.Runtime
                 Progress = m_DownloadOperator.Progress * .5f;
                 if (!m_DownloadOperator.IsDone) return;
 
-                if (m_DownloadOperator.Status == OperatorStatus.Success)
+                if (m_DownloadOperator.Status == EOperatorStatus.Success)
                 {
                     m_Step = EStep.WaitAssetBundleRequest;
                 }
@@ -104,7 +104,7 @@ namespace XyzAssets.Runtime
                 {
                     Error = m_DownloadOperator.Error;
                     m_Step = EStep.None;
-                    Status = OperatorStatus.Failed;
+                    Status = EOperatorStatus.Failed;
                 }
                 m_DownloadOperator = null;
             }
@@ -154,11 +154,11 @@ namespace XyzAssets.Runtime
                 if (CachedBundle == null)
                 {
                     Error = StringUtility.Format("Can load assetbundle form {0}", filePath);
-                    Status = OperatorStatus.Failed;
+                    Status = EOperatorStatus.Failed;
                 }
                 else
                 {
-                    Status = OperatorStatus.Success;
+                    Status = EOperatorStatus.Success;
                 }
 
                 m_Step = EStep.None;
@@ -170,11 +170,11 @@ namespace XyzAssets.Runtime
                 if (CachedBundle == null)
                 {
                     Error = StringUtility.Format("Can load assetbundle form {0}", filePath);
-                    Status = OperatorStatus.Failed;
+                    Status = EOperatorStatus.Failed;
                 }
                 else
                 {
-                    Status = OperatorStatus.Success;
+                    Status = EOperatorStatus.Success;
                 }
 
                 m_Step = EStep.None;
@@ -185,11 +185,11 @@ namespace XyzAssets.Runtime
                 if (CachedBundle == null)
                 {
                     Error = StringUtility.Format("Can load assetbundle form {0}", filePath);
-                    Status = OperatorStatus.Failed;
+                    Status = EOperatorStatus.Failed;
                 }
                 else
                 {
-                    Status = OperatorStatus.Success;
+                    Status = EOperatorStatus.Success;
                 }
             }
         }
@@ -215,11 +215,11 @@ namespace XyzAssets.Runtime
                     if (CachedBundle == null)
                     {
                         Error = StringUtility.Format("Can load assetbundle form {0}", filePath);
-                        Status = OperatorStatus.Failed;
+                        Status = EOperatorStatus.Failed;
                     }
                     else
                     {
-                        Status = OperatorStatus.Success;
+                        Status = EOperatorStatus.Success;
                     }
                 }
                 else if (m_BundleInfo.EncryptType == BundleEncryptType.Stream)
@@ -229,11 +229,11 @@ namespace XyzAssets.Runtime
                     if (CachedBundle == null)
                     {
                         Error = StringUtility.Format("Can load assetbundle form {0}", filePath);
-                        Status = OperatorStatus.Failed;
+                        Status = EOperatorStatus.Failed;
                     }
                     else
                     {
-                        Status = OperatorStatus.Success;
+                        Status = EOperatorStatus.Success;
                     }
                 }
                 else
@@ -242,11 +242,11 @@ namespace XyzAssets.Runtime
                     if (CachedBundle == null)
                     {
                         Error = StringUtility.Format("Can load assetbundle form {0}", filePath);
-                        Status = OperatorStatus.Failed;
+                        Status = EOperatorStatus.Failed;
                     }
                     else
                     {
-                        Status = OperatorStatus.Success;
+                        Status = EOperatorStatus.Success;
                     }
                 }
             }
@@ -260,7 +260,7 @@ namespace XyzAssets.Runtime
         private DownloadOperator m_DownloadOperator;
         private AndriodExtractToExtenalFromStreamingAssets m_ExtractOpera;
 
-        private class AndriodExtractToExtenalFromStreamingAssets : ResourceBaseOperator
+        private class AndriodExtractToExtenalFromStreamingAssets : AsyncOperationBase
         {
             public AndriodExtractToExtenalFromStreamingAssets(string fileName)
             {
@@ -284,12 +284,12 @@ namespace XyzAssets.Runtime
                 if (string.IsNullOrEmpty(m_WebRequest.error))
                 {
                     File.WriteAllBytes(XyzAssetPathHelper.GetFileExternalPath(m_FileName), m_WebRequest.downloadHandler.data);
-                    Status = OperatorStatus.Success;
+                    Status = EOperatorStatus.Success;
                 }
                 else
                 {
                     Error = m_WebRequest.error;
-                    Status = OperatorStatus.Failed;
+                    Status = EOperatorStatus.Failed;
                 }
             }
 
@@ -341,18 +341,18 @@ namespace XyzAssets.Runtime
 
             if (!_isDone) return;
 
-            var _state = OperatorStatus.Success;
+            var _state = EOperatorStatus.Success;
             for (int i = 0; i < m_LoadBundleOperators.Length; i++)
             {
-                if (m_LoadBundleOperators[i].Status == OperatorStatus.Failed)
+                if (m_LoadBundleOperators[i].Status == EOperatorStatus.Failed)
                 {
-                    _state = OperatorStatus.Failed;
+                    _state = EOperatorStatus.Failed;
                     Error = m_LoadBundleOperators[i].Error;
                     break;
                 }
             }
 
-            if (_state == OperatorStatus.Success)
+            if (_state == EOperatorStatus.Success)
                 CachedBundle = m_Impl.GetBundle(m_MainId);
             Status = _state;
 
@@ -362,7 +362,7 @@ namespace XyzAssets.Runtime
         {
             if (m_WaitBundleInfos == null || m_WaitBundleInfos.Length == 0)
             {
-                Status = OperatorStatus.Success;
+                Status = EOperatorStatus.Success;
             }
             else
             {

@@ -48,7 +48,7 @@ namespace XyzAssets.Runtime
                 {
                     m_Manifest = ManifestSerialize.DeserializeFromBinary(m_WebRequest.downloadHandler.data);
                     (m_Impl as OnlineAssetsSystemImpl).SetRemoteManifest(m_Manifest);
-                    Status = OperatorStatus.Success;
+                    Status = EOperatorStatus.Success;
                 }
                 else
                 {
@@ -57,7 +57,7 @@ namespace XyzAssets.Runtime
                         Error = StringUtility.Format("Uri:{0} Error:{1}", m_WebRequest.uri, m_WebRequest.error);
                         m_WebRequest.Dispose();
                         m_WebRequest = null;
-                        Status = OperatorStatus.Failed;
+                        Status = EOperatorStatus.Failed;
                     }
                     else
                     {
@@ -81,7 +81,7 @@ namespace XyzAssets.Runtime
             if (m_ResUrls == null || m_ResUrls.Length == 0)
             {
                 Error = "OnlineUpdateManifest Error. ResUrls is null or empty";
-                Status = OperatorStatus.Failed;
+                Status = EOperatorStatus.Failed;
             }
             m_CurrentRetryTimes = 0;
             m_CurrentUrlIndex = 0;

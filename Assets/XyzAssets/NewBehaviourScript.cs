@@ -13,7 +13,7 @@ public class NewBehaviourScript : MonoBehaviour
         initialize.PlayModeService = new PlayModeService();
         using var op = XyzAssets.Runtime.XyzAsset.Initialize(initialize);
         yield return op;
-        if (op.Status == OperatorStatus.Success)
+        if (op.Status == EOperatorStatus.Success)
         {
 
         }

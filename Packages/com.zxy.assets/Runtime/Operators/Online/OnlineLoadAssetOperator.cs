@@ -17,7 +17,7 @@ namespace XyzAssets.Runtime
 
             if (!m_LoadBundleOperator.IsDone) return;
 
-            if (m_LoadBundleOperator.Status == OperatorStatus.Failed)
+            if (m_LoadBundleOperator.Status == EOperatorStatus.Failed)
             {
                 Error = m_LoadBundleOperator.Error;
                 Status = m_LoadBundleOperator.Status;
@@ -35,12 +35,12 @@ namespace XyzAssets.Runtime
                         if (m_AssetBundleRequest.asset == null)
                         {
                             Error = StringUtility.Format("Failed Load name:{0} type:{1} from Bundle:{2}", m_AssetInfo.AssetPath, m_Type.Name, m_LoadBundleOperator.CachedBundle.name);
-                            Status = OperatorStatus.Failed;
+                            Status = EOperatorStatus.Failed;
                         }
                         else
                         {
                             AssetObject = m_AssetBundleRequest.asset;
-                            Status = OperatorStatus.Success;
+                            Status = EOperatorStatus.Success;
                         }
                     }
                 }
@@ -51,11 +51,11 @@ namespace XyzAssets.Runtime
                     if (AssetObject == null)
                     {
                         Error = StringUtility.Format("Failed Load name:{0} type:{1} from Bundle:{2}", m_AssetInfo.AssetPath, m_Type.Name, m_LoadBundleOperator.CachedBundle.name);
-                        Status = OperatorStatus.Failed;
+                        Status = EOperatorStatus.Failed;
                     }
                     else
                     {
-                        Status = OperatorStatus.Success;
+                        Status = EOperatorStatus.Success;
                     }
                 }
             }

@@ -7,10 +7,10 @@ namespace XyzAssets.Runtime
         private class WeakRefData
         {
             internal UnityEngine.Object holder;
-            internal ResourceBaseOperator tartget;
+            internal AsyncOperationBase tartget;
         }
 
-        internal static void AddWeakReference(UnityEngine.Object holder, ResourceBaseOperator target)
+        internal static void AddWeakReference(UnityEngine.Object holder, AsyncOperationBase target)
         {
             m_WeakReferences.Add(new WeakRefData() { holder = holder, tartget = target });
         }

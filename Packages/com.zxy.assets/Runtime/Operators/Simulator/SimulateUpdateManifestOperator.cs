@@ -10,7 +10,7 @@
         protected override void OnExecute()
         {
             Progress = 1;
-            Status = EOperatorStatus.Success;
+            Status = EOperatorStatus.Succeed;
         }
 
         protected override void OnStart()

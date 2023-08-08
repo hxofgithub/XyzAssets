@@ -52,7 +52,7 @@ namespace XyzAssets.Runtime
             {
                 if (m_SceneObject.IsValid())
                 {
-                    Status = EOperatorStatus.Success;
+                    Status = EOperatorStatus.Succeed;
                     SceneManager.SetActiveScene(m_SceneObject);
                 }
                 else

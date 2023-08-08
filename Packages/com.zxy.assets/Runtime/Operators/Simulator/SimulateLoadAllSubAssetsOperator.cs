@@ -46,7 +46,7 @@ namespace XyzAssets.Runtime
             }
             else
             {
-                Status = EOperatorStatus.Success;
+                Status = EOperatorStatus.Succeed;
             }
 
 #endif
@@ -68,7 +68,7 @@ namespace XyzAssets.Runtime
         {
 #if UNITY_EDITOR
             if (m_WaitLoadValuPairs == null || m_WaitLoadValuPairs.Count == 0)
-                Status = EOperatorStatus.Success;
+                Status = EOperatorStatus.Succeed;
             else
             {
                 m_TotalNeedLoadCnt = m_WaitLoadValuPairs.Count;

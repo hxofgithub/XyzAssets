@@ -36,20 +36,5 @@ namespace XyzAssets.Runtime
         /// 名字格式
         /// </summary>
         public BundleFileNameType NameType;
-
     }
-
-    [System.Serializable]
-    internal class AssetInfo
-    {
-        public string AssetPath;
-
-        public int MainId;
-        /// <summary>
-        /// 依赖
-        /// </summary>
-        public int[] Dependencies;
-
-    }
-
 }

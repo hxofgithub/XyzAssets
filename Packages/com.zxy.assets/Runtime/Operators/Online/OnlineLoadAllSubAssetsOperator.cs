@@ -32,7 +32,7 @@ namespace XyzAssets.Runtime
 
                 m_LoadedOperatorQueue.Enqueue(m_LoadAssetOpera);
 
-                if (m_LoadAssetOpera.Status == EOperatorStatus.Success)
+                if (m_LoadAssetOpera.Status == EOperatorStatus.Succeed)
                 {
                     AllAssetsObject[m_CurrentLoadedCnt] = m_LoadAssetOpera.AssetObject;
                     m_CurrentLoadedCnt += 1;
@@ -49,7 +49,7 @@ namespace XyzAssets.Runtime
             {
                 if (m_WaitLoadValuPairs.Count == 0)
                 {
-                    Status = EOperatorStatus.Success;
+                    Status = EOperatorStatus.Succeed;
                 }
                 else
                 {
@@ -87,7 +87,7 @@ namespace XyzAssets.Runtime
         protected override void OnStart()
         {
             if (m_WaitLoadValuPairs == null || m_WaitLoadValuPairs.Count == 0)
-                Status = EOperatorStatus.Success;
+                Status = EOperatorStatus.Succeed;
             else
             {
                 m_TotalNeedLoadCnt = m_WaitLoadValuPairs.Count;

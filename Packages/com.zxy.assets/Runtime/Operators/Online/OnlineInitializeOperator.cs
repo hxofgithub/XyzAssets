@@ -105,8 +105,6 @@ namespace XyzAssets.Runtime
             }
             m_OnlineParameters = null;
 
-            //Debug.Log("-----OnlineInitializeOperator Dispose");
-
             m_Impl = null;
         }
 
@@ -128,7 +126,7 @@ namespace XyzAssets.Runtime
 
                     File.WriteAllBytes(path, binary);
                     m_Impl.SetActiveManifest(manifest);
-                    Status = EOperatorStatus.Success;
+                    Status = EOperatorStatus.Succeed;
                 }
                 catch (System.Exception e)
                 {

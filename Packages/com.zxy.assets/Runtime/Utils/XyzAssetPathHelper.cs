@@ -3,42 +3,57 @@ namespace XyzAssets.Runtime
 {
     public class XyzAssetPathHelper
     {
+        #region 临时文件路径
+        public static string ExternalTempPath
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(m_ExternalTempPath))
+                {
+                    string path = "Temp";
+
+                    if (UnityEngine.Application.isMobilePlatform)
+                    {
+                        path = Path.Combine(UnityEngine.Application.persistentDataPath, path);
+#if UNITY_IOS
+                        UnityEngine.iOS.Device.SetNoBackupFlag(path);
+#endif
+                        m_ExternalTempPath = path;
+                    }
+                    else
+                        m_ExternalTempPath = $"SandBox/{path}";
+                }
+                return m_ExternalTempPath;
+            }
+        }
+        private static string m_ExternalTempPath;
+        public static string GetTempFilePath(string fileName)
+        {
+            return Path.Combine(ExternalTempPath, fileName);
+        }
+        #endregion
+
+        #region 外部路径
         public static string ExternalPath
         {
             get
             {
                 if (string.IsNullOrEmpty(m_ExternalPath))
                 {
-                    string path = XyzConfiguration.ResourceRootName;
+                    string path = "Data";
 
                     if (UnityEngine.Application.isMobilePlatform)
                     {
-                        if (string.IsNullOrEmpty(path))
-                            path = UnityEngine.Application.persistentDataPath;
-                        else
-                            path = Path.Combine(UnityEngine.Application.persistentDataPath, path);
+                        path = Path.Combine(UnityEngine.Application.persistentDataPath, path);
 #if UNITY_IOS
                         UnityEngine.iOS.Device.SetNoBackupFlag(path);
 #endif
                         m_ExternalPath = path;
                     }
                     else
-                        m_ExternalPath = $"SandBox/{XyzConfiguration.ResourceRootName}";
+                        m_ExternalPath = $"SandBox/{path}";
                 }
                 return m_ExternalPath;
-            }
-            set
-            {
-                if (string.IsNullOrEmpty(value) || m_ExternalPath == value)
-                    return;
-                m_ExternalPath = value;
-                if (UnityEngine.Application.isMobilePlatform)
-                {
-#if UNITY_IOS
-                    UnityEngine.iOS.Device.SetNoBackupFlag(m_ExternalPath);
-#endif
-                }
-
             }
         }
         private static string m_ExternalPath;
@@ -47,6 +62,7 @@ namespace XyzAssets.Runtime
         {
             return Path.Combine(ExternalPath, fileName);
         }
+        #endregion
 
     }
 }

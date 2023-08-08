@@ -21,7 +21,7 @@ namespace XyzAssets.Runtime
             protected set
             {
                 base.Status = value;
-                if (OnComplete != null && value == EOperatorStatus.Success && !m_IsDisposed)
+                if (OnComplete != null && value == EOperatorStatus.Succeed && !m_IsDisposed)
                 {
                     OnComplete(this);
                     OnComplete = null;
@@ -49,7 +49,7 @@ namespace XyzAssets.Runtime
             protected set
             {
                 base.Status = value;
-                if (OnComplete != null && value == EOperatorStatus.Success)
+                if (OnComplete != null && value == EOperatorStatus.Succeed)
                 {
                     OnComplete(this);
                     OnComplete = null;

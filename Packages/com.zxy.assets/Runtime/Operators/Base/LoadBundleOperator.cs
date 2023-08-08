@@ -20,7 +20,7 @@ namespace XyzAssets.Runtime
             {
                 base.Status = value;
 
-                if (OnComplete != null && value == EOperatorStatus.Success && !m_IsDisposed)
+                if (OnComplete != null && value == EOperatorStatus.Succeed && !m_IsDisposed)
                 {
                     OnComplete(this);
                     OnComplete = null;

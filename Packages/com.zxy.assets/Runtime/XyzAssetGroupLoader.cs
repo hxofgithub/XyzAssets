@@ -23,7 +23,7 @@ namespace XyzAssets.Runtime
             protected set
             {
                 base.Status = value;
-                if (OnComplete != null && value == EOperatorStatus.Success)
+                if (OnComplete != null && value == EOperatorStatus.Succeed)
                 {
                     OnComplete();
                     OnComplete = null;
@@ -90,7 +90,7 @@ namespace XyzAssets.Runtime
             m_CurrentLoadCnt++;
             if (m_CurrentLoadCnt == m_TotalNeedLoadCnt)
             {
-                Status = EOperatorStatus.Success;
+                Status = EOperatorStatus.Succeed;
             }
         }
         private string GetKey(System.Type type, string name)

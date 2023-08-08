@@ -40,7 +40,7 @@ namespace XyzAssets.Runtime
                         else
                         {
                             AssetObject = m_AssetBundleRequest.asset;
-                            Status = EOperatorStatus.Success;
+                            Status = EOperatorStatus.Succeed;
                         }
                     }
                 }
@@ -55,7 +55,7 @@ namespace XyzAssets.Runtime
                     }
                     else
                     {
-                        Status = EOperatorStatus.Success;
+                        Status = EOperatorStatus.Succeed;
                     }
                 }
             }

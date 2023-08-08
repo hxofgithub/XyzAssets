@@ -48,7 +48,7 @@ namespace XyzAssets.Runtime
                 {
                     m_Manifest = ManifestSerialize.DeserializeFromBinary(m_WebRequest.downloadHandler.data);
                     (m_Impl as OnlineAssetsSystemImpl).SetRemoteManifest(m_Manifest);
-                    Status = EOperatorStatus.Success;
+                    Status = EOperatorStatus.Succeed;
                 }
                 else
                 {

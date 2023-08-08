@@ -15,10 +15,10 @@ namespace XyzAssets.Runtime
         protected override void OnStart()
         {
             if (m_BundleInfos == null || m_BundleInfos.Length == 0)
-                Status = EOperatorStatus.Success;
+                Status = EOperatorStatus.Succeed;
             else
             {
-                XyzAssetPathHelper.ExternalPath = m_ExtractRootPath;
+                //XyzAssetPathHelper.ExternalPath = m_ExtractRootPath;
                 m_ExtractIndex = -1;
                 for (int i = 0; i < m_BundleInfos.Length; i++)
                 {
@@ -37,7 +37,7 @@ namespace XyzAssets.Runtime
                 }
                 if (m_ExtractIndex == -1)
                 {
-                    Status = EOperatorStatus.Success;
+                    Status = EOperatorStatus.Succeed;
                 }
             }
         }
@@ -59,7 +59,7 @@ namespace XyzAssets.Runtime
 
                     if (m_ExtractIndex == m_BundleInfos.Length)
                     {
-                        Status = EOperatorStatus.Success;
+                        Status = EOperatorStatus.Succeed;
 
                         m_WebRequest.Dispose();
                         m_WebRequest = null;
@@ -99,7 +99,7 @@ namespace XyzAssets.Runtime
 
                 if (m_ExtractIndex == m_BundleInfos.Length)
                 {
-                    Status = EOperatorStatus.Success;
+                    Status = EOperatorStatus.Succeed;
                 }
             }
         }

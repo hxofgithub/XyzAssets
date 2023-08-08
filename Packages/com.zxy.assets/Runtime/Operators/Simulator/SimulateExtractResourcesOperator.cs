@@ -16,7 +16,7 @@ namespace XyzAssets.Runtime
 
         protected override void OnExecute()
         {
-            Status = EOperatorStatus.Success;
+            Status = EOperatorStatus.Succeed;
         }
 
         protected override void OnDispose()

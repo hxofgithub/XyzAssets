@@ -1,80 +1,88 @@
 ﻿using System;
 using System.Collections;
-using System.Threading.Tasks;
 
 namespace XyzAssets.Runtime
 {
-    
-
-    public abstract class AsyncOperationBase : IEnumerator
+    public abstract class AsyncOperationBase : IEnumerator, IDisposable
     {
+        public AsyncOperationBase(bool autoAddToOpSystem)
+        {
+            if (autoAddToOpSystem)
+                XyzOperatorSystem.AddAssetOperator(this);
+        }
 
-        private Action<AsyncOperationBase> _callback;
+        public AsyncOperationBase() : this(true) { }
 
         public event Action<float> OnProgress;
 
-        public bool IsDone { get => Status == EOperatorStatus.Success || Status == EOperatorStatus.Failed; }
-        public EOperatorStatus Status { get; protected set; } = EOperatorStatus.Success;
+        public bool IsDone { get => Status == EOperatorStatus.Succeed || Status == EOperatorStatus.Failed; }
+        public virtual EOperatorStatus Status
+        {
+            get => m_Status;
+            protected set
+            {
+                m_Status = value;
+            }
+        }
 
         public string Error { get; protected set; }
 
-        public float Progress { get; protected set; }
-
-        public event Action<AsyncOperationBase> Completed
+        public float Progress
         {
-            add
+            get => m_Progress;
+            protected set
             {
-                if (IsDone)
-                    value.Invoke(this);
-                else
-                    _callback += value;
-            }
-            remove
-            {
-                _callback -= value;
-            }
-        }
-
-        public Task Task
-        {
-            get
-            {
-                if (_taskCompletionSource == null)
+                if (m_Progress != value)
                 {
-                    _taskCompletionSource = new TaskCompletionSource<object>();
-                    if (IsDone)
-                        _taskCompletionSource.SetResult(null);
+                    m_Progress = value;
+                    OnProgress?.Invoke(value);
                 }
-                return _taskCompletionSource.Task;
             }
         }
+        private float m_Progress;
 
-        internal abstract void Start();
-        internal abstract void Update();
-        internal void Finish()
+        public void Dispose()
         {
-            Progress = 1f;
-            _callback?.Invoke(this);
-            if (_taskCompletionSource != null)
-                _taskCompletionSource.TrySetResult(null);
+            if (!m_IsDisposed)
+            {
+                m_IsDisposed = true;
+                OnDispose();
+            }
+        }
+        public void Execute()
+        {
+            if (IsDone) return;
+            if (m_IsDisposed) return;
+            if (m_IsStarted)
+                OnExecute();
+            else
+                Start();
         }
 
-        protected void ClearCompletedCallback()
+        private void Start()
         {
-            _callback = null;
+            if (Status != EOperatorStatus.None) return;
+
+            Progress = 0;
+            m_IsStarted = true;
+            OnStart();
         }
 
 
-        bool IEnumerator.MoveNext()
-        {
-            return !IsDone;
-        }
+        protected abstract void OnDispose();
+        protected abstract void OnExecute();
+        protected abstract void OnStart();
 
-        void IEnumerator.Reset()
-        {
-
-        }
+        #region IEnumerator
+        bool IEnumerator.MoveNext() => !IsDone;
         object IEnumerator.Current => null;
-        private TaskCompletionSource<object> _taskCompletionSource;
+        void IEnumerator.Reset() { }
+
+
+        #endregion
+
+        protected bool m_IsDisposed { get; private set; }
+        private bool m_IsStarted;
+        private EOperatorStatus m_Status;
     }
 }

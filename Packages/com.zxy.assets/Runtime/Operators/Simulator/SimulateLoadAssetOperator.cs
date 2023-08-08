@@ -18,7 +18,7 @@ namespace XyzAssets.Runtime
                 Status = EOperatorStatus.Failed;
             }
             else
-                Status = EOperatorStatus.Success;
+                Status = EOperatorStatus.Succeed;
 
 #endif
         }

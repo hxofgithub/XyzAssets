@@ -34,7 +34,7 @@ namespace XyzAssets.Runtime
             m_CurrentDownloadedBytes = 0;
             if (m_BundleInfos == null || m_BundleInfos.Length == 0)
             {
-                Status = EOperatorStatus.Success;
+                Status = EOperatorStatus.Succeed;
             }
             else
             {
@@ -122,7 +122,7 @@ namespace XyzAssets.Runtime
             }
             else if (m_Step == DownloadStep.Completed)
             {
-                Status = EOperatorStatus.Success;
+                Status = EOperatorStatus.Succeed;
             }
 
         }

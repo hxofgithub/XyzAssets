@@ -66,7 +66,7 @@ namespace XyzAssets.Runtime
                 {
                     SceneManager.sceneUnloaded += SceneManager_sceneUnloaded;
                     SceneManager.SetActiveScene(m_SceneObject);
-                    Status = EOperatorStatus.Success;
+                    Status = EOperatorStatus.Succeed;
                 }
                 else
                 {

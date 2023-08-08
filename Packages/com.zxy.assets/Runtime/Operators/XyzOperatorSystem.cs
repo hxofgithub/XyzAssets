@@ -8,72 +8,58 @@ namespace XyzAssets.Runtime
         {
             get
             {
-                return _watch.ElapsedMilliseconds - _lastFrameTime >= MaxTimeSlice;
+                return m_Watch.ElapsedMilliseconds - m_LastFrameTime >= MaxTimeSlice;
             }
         }
         internal static long MaxTimeSlice { get; set; } = long.MaxValue;
 
         internal static void Initialize()
         {
-            _watch = Stopwatch.StartNew();
+            m_Watch = Stopwatch.StartNew();
+            m_Initialize = true;
+        }
+
+        internal static void AddAssetOperator(AsyncOperationBase op)
+        {
+            m_AssetOperations.Add(op);
+        }
+
+        internal static void Dispose()
+        {
+            m_Initialize = false;
+            m_AssetOperations.Clear();
+            m_RemoveIndex.Clear();
+            XyzLogger.Log("XyzOperatorSystem Dispose");
         }
 
         internal static void Execute()
         {
-            if (_watch == null) return;
+            if (!m_Initialize) return;
 
-            _lastFrameTime = _watch.ElapsedMilliseconds;
+            m_RemoveIndex.Clear();
 
-            if (_addList.Count > 0)
+            m_LastFrameTime = m_Watch.ElapsedMilliseconds;
+            for (int i = 0; i < m_AssetOperations.Count; i++)
             {
-                _operations.AddRange(_addList);
-                _addList.Clear();
+                if (IsBusy)
+                    break;
+
+                var opera = m_AssetOperations[i];
+                opera.Execute();
+                if (opera.IsDone)
+                    m_RemoveIndex.Add(i);
             }
-
-            for (int i = 0, cnt = _operations.Count; i < cnt; i++)
+            for (int i = m_RemoveIndex.Count - 1; i >= 0; i--)
             {
-                if (IsBusy) break;
-                var operation = _operations[i];
-                operation.Update();
-                if (operation.IsDone)
-                {
-                    _removeList.Add(i);
-                    operation.Finish();
-                }                    
-            }
-
-            if (_removeList.Count > 0)
-            {
-                for (int i = _removeList.Count - 1; i >= 0; i--)
-                {
-                    _operations.RemoveAt(_removeList[i]);
-                }
-                _removeList.Clear();
+                var index = m_RemoveIndex[i];
+                m_AssetOperations.RemoveAt(index);
             }
         }
 
-        public static void StartOperation(AsyncOperationBase operation)
-        {
-            _addList.Add(operation);
-            operation.Start();
-        }
-
-		public static void DestroyAll()
-        {
-            _operations.Clear();
-            _addList.Clear();
-            _removeList.Clear();
-            _watch = null;
-            _lastFrameTime = 0;
-            MaxTimeSlice = long.MaxValue;
-        }
-
-
-        private static readonly List<AsyncOperationBase> _operations = new List<AsyncOperationBase>(100);
-        private static readonly List<AsyncOperationBase> _addList = new List<AsyncOperationBase>(100);
-        private static readonly List<int> _removeList = new List<int>(100);
-
-        private static Stopwatch _watch;
-        private static long _lastFrameTime = 0;
+        private static readonly List<AsyncOperationBase> m_AssetOperations = new List<AsyncOperationBase>(128);
+        private static readonly List<int> m_RemoveIndex = new List<int>();
+        private static Stopwatch m_Watch;
+        private static long m_LastFrameTime = 0;
+        private static bool m_Initialize = false;
     }
 }

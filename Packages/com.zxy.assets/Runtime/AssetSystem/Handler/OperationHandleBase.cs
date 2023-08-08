@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -32,7 +32,7 @@ namespace XyzAssets.Runtime
                 if (Provider.Status == ProviderBase.EStatus.Failed)
                     return EOperatorStatus.None;
                 else if (Provider.Status == ProviderBase.EStatus.Succeed)
-                    return EOperatorStatus.Success;
+                    return EOperatorStatus.Succeed;
                 return EOperatorStatus.None;
             }
         }
@@ -60,7 +60,7 @@ namespace XyzAssets.Runtime
         {
             get
             {
-                if(Provider != null && !Provider.IsDestroyed)
+                if (Provider != null && !Provider.IsDestroyed)
                 {
                     return true;
                 }

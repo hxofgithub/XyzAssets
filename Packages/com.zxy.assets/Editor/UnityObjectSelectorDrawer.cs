@@ -18,7 +18,7 @@ namespace XyzAssets.Editor
 
             Object obj = AssetDatabase.LoadMainAssetAtPath(property.stringValue);
 
-            obj = EditorGUI.ObjectField(new Rect(position.x, position.y, position.width - 300, position.height), obj, typeof(UnityEngine.Object), false);
+            obj = EditorGUI.ObjectField(new Rect(position.x, position.y, position.width, position.height), obj, typeof(UnityEngine.Object), false);
             if (obj != null)
                 property.stringValue = AssetDatabase.GetAssetPath(obj);
             else

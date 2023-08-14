@@ -13,7 +13,7 @@ namespace XyzAssets.Runtime
             Completed,
         }
 
-        internal OnlineDownloadOperator(OnlineAssetsSystemImpl impl, BundleInfo[] downloadInfos)
+        internal OnlineDownloadOperator(OnlineSystemImpl impl, BundleInfo[] downloadInfos)
         {
             m_BundleInfos = downloadInfos;
             m_Impl = impl;
@@ -72,7 +72,7 @@ namespace XyzAssets.Runtime
                 if (string.IsNullOrEmpty(m_WebRequest.error))
                 {
                     var bundleInfo = m_BundleInfos[m_CurrentBundleInfoIndex];
-                    var hash = XyzAssetUtils.CalculateMD5(m_WebRequest.downloadHandler.data);
+                    var hash = AssetsUtility.CalculateMD5(m_WebRequest.downloadHandler.data);
                     var bundleName = bundleInfo.NameType == BundleFileNameType.Hash ? bundleInfo.Version : bundleInfo.BundleName;
                     if (bundleInfo.Version != hash)
                     {
@@ -85,7 +85,7 @@ namespace XyzAssets.Runtime
                     else
                     {
                         m_RetryTimes = 0;
-                        var extenalPath = XyzAssetPathHelper.GetFileExternalPath(bundleName);
+                        var extenalPath = AssetsPathHelper.GetFileExternalPath(bundleName);
                         var direName = Path.GetDirectoryName(extenalPath);
 
                         if (!Directory.Exists(direName))
@@ -144,7 +144,7 @@ namespace XyzAssets.Runtime
         private int m_CurrentResUrlIndex, m_RetryTimes;
         private int m_CurrentBundleInfoIndex;
         private UnityWebRequest m_WebRequest;
-        private OnlineAssetsSystemImpl m_Impl;
+        private OnlineSystemImpl m_Impl;
         private ulong m_CurrentDownloadedBytes;
         private string[] m_ResUrls;
         private int m_MaxRetryTimes;

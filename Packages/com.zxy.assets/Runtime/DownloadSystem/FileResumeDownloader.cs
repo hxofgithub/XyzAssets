@@ -3,7 +3,7 @@ using UnityEngine.Networking;
 
 namespace XyzAssets.Runtime
 {
-    internal class FileResumeDownloader : DownloaderBase
+    internal sealed class FileResumeDownloader : DownloaderBase
     {
         private enum EStep
         {
@@ -26,12 +26,17 @@ namespace XyzAssets.Runtime
 
         }
 
+        protected override void OnStart()
+        {
+            
+        }
+
         internal override void SendRequest()
         {
             _step = EStep.CheckTempFile;
         }
 
-        internal override void Update()
+        protected override void OnExecute()
         {
             if (_step == EStep.None)
                 return;
@@ -42,7 +47,7 @@ namespace XyzAssets.Runtime
             if (_step == EStep.CheckTempFile)
             {
                 //检测已下载的文件
-                _verifyOpera = VerifyTempOpeation.Create(_tempFilePath, BundleInfo.Version, BundleInfo.FileSize);
+                _verifyOpera = CachingSystem.VerifyTempFile(_tempFilePath, BundleInfo.FileSize, BundleInfo.Version);
                 _step = EStep.WaitingCheckTempFile;
             }
             else if (_step == EStep.WaitingCheckTempFile)
@@ -135,11 +140,7 @@ namespace XyzAssets.Runtime
 #endif
                 if (hasError)
                 {
-                    if (DownloadSystem.ClearFileResponseCodes != null)
-                    {
-                        if (DownloadSystem.ClearFileResponseCodes.Contains(ResponseCode))
-                            CachingSystem.TryDiscardTempFile(_tempFilePath);
-                    }
+                    CachingSystem.TryDiscardTempFile(_tempFilePath);
                     _step = EStep.TryAgain;
                 }
                 else
@@ -150,7 +151,7 @@ namespace XyzAssets.Runtime
             }
             else if (_step == EStep.VerifyTempFile)
             {
-                _verifyOpera = VerifyTempOpeation.Create(_tempFilePath, BundleInfo.Version, BundleInfo.FileSize);
+                _verifyOpera = CachingSystem.VerifyTempFile(_tempFilePath, BundleInfo.FileSize, BundleInfo.Version);
                 _step = EStep.WaitingVerifyTempFile;
             }
             else if (_step == EStep.WaitingVerifyTempFile)
@@ -172,8 +173,8 @@ namespace XyzAssets.Runtime
             {
                 try
                 {
-                    CachingFile(_tempFilePath);
-                    Status = EStatus.Succeed;
+                    CachingSystem.SaveCachingFile(_tempFilePath);
+                    Status = EOperatorStatus.Succeed;
                     _step = EStep.Done;
                     Error = "";
                     ResponseCode = 0;
@@ -188,7 +189,7 @@ namespace XyzAssets.Runtime
             {
                 if (_requestRetryTimes <= 0)
                 {
-                    Status = EStatus.Failed;
+                    Status = EOperatorStatus.Failed;
                     return;
                 }
                 _tryAgainTimer += Time.unscaledDeltaTime;
@@ -200,7 +201,7 @@ namespace XyzAssets.Runtime
             }
         }
 
-        internal override void Abort()
+        protected override void Abort()
         {
             if (IsDone) return;
             _isAbort = true;
@@ -209,7 +210,7 @@ namespace XyzAssets.Runtime
             _webRequest = null;
         }
 
-        internal override void Dispose()
+        protected override void OnDispose()
         {
             if (_webRequest != null)
             {

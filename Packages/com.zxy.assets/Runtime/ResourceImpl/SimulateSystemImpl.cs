@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 namespace XyzAssets.Runtime
 {
-    internal class SimulateAssetsSystemImpl : IAssetsSystemImpl
+    internal class SimulateSystemImpl : IAssetsSystemImpl
     {
         DownloadOperator IAssetsSystemImpl.CreateDownloaderByModes(string[] modeNames)
         {

@@ -24,7 +24,7 @@ namespace XyzAssets.Runtime
         }
     }
 
-    public static class XyzAssetUtils
+    public static class AssetsUtility
     {
         //[ThreadStatic]
         private static readonly StringBuilder _sharedStringBuilder = new StringBuilder(1024);

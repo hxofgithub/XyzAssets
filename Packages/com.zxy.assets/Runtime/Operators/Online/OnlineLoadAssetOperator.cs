@@ -4,7 +4,7 @@ namespace XyzAssets.Runtime
 {
     internal sealed class OnlineLoadAssetOperator : BaseLoadAssetOperator
     {
-        internal OnlineLoadAssetOperator(OnlineAssetsSystemImpl impl, AssetInfo assetInfo, System.Type type, bool async) : base(assetInfo, type, async)
+        internal OnlineLoadAssetOperator(OnlineSystemImpl impl, AssetInfo assetInfo, System.Type type, bool async) : base(assetInfo, type, async)
         {
             m_Impl = impl;
         }
@@ -89,6 +89,6 @@ namespace XyzAssets.Runtime
 
         private LoadBundleOperator m_LoadBundleOperator;
         private AssetBundleRequest m_AssetBundleRequest;
-        private OnlineAssetsSystemImpl m_Impl;
+        private OnlineSystemImpl m_Impl;
     }
 }

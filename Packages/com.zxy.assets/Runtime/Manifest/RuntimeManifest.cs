@@ -15,7 +15,7 @@
 
 
     [System.Serializable]
-    internal class XyzAssetsRuntimeManifest
+    internal class RuntimeManifest
     {
         internal BundleInfo[] BundleList;
         internal AssetInfo[] AssetInfoList;

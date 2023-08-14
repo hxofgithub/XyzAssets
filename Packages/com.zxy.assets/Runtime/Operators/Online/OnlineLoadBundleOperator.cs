@@ -17,19 +17,7 @@ namespace XyzAssets.Runtime
             ExtractFormStreamingAssetPath,
         }
 
-        public override EOperatorStatus Status
-        {
-            get => base.Status;
-            protected set
-            {
-                if (value == EOperatorStatus.Succeed)
-                    XyzLogger.LogWarning(StringUtility.Format("-------[Load Bundle]: {0}", m_BundleInfo.BundleName));
-
-                base.Status = value;
-            }
-        }
-
-        internal OnlineLoadBundleOperator(OnlineAssetsSystemImpl impl, BundleInfo bundleInfo) : base(bundleInfo)
+        internal OnlineLoadBundleOperator(OnlineSystemImpl impl, BundleInfo bundleInfo) : base(bundleInfo)
         {
             m_Impl = impl;
             m_Step = EStep.None;
@@ -121,7 +109,7 @@ namespace XyzAssets.Runtime
 
             var bundleName = m_BundleInfo.NameType == BundleFileNameType.Hash ? m_BundleInfo.Version : m_BundleInfo.BundleName;
             //cached ?
-            if (!File.Exists(XyzAssetPathHelper.GetFileExternalPath(bundleName)))
+            if (!File.Exists(AssetsPathHelper.GetFileExternalPath(bundleName)))
             {
 
                 if (!StreamingAssetsHelper.FileExists(bundleName))
@@ -143,7 +131,7 @@ namespace XyzAssets.Runtime
         private void LoadAssetBundleFromExternal()
         {
             var bundleName = m_BundleInfo.NameType == BundleFileNameType.Hash ? m_BundleInfo.Version : m_BundleInfo.BundleName;
-            var filePath = XyzAssetPathHelper.GetFileExternalPath(bundleName);
+            var filePath = AssetsPathHelper.GetFileExternalPath(bundleName);
 
             //XyzLogger.Log($"----LoadAssetBundleFromExternal---: Name:{m_BundleInfo.BundleName}  Version:{m_BundleInfo.Version}--");
 
@@ -251,7 +239,7 @@ namespace XyzAssets.Runtime
             }
         }
 
-        private OnlineAssetsSystemImpl m_Impl;
+        private OnlineSystemImpl m_Impl;
         private Stream m_Stream;
         private EStep m_Step;
 
@@ -282,7 +270,7 @@ namespace XyzAssets.Runtime
                 if (!m_WebRequest.isDone) return;
                 if (string.IsNullOrEmpty(m_WebRequest.error))
                 {
-                    File.WriteAllBytes(XyzAssetPathHelper.GetFileExternalPath(m_FileName), m_WebRequest.downloadHandler.data);
+                    File.WriteAllBytes(AssetsPathHelper.GetFileExternalPath(m_FileName), m_WebRequest.downloadHandler.data);
                     Status = EOperatorStatus.Succeed;
                 }
                 else
@@ -307,7 +295,7 @@ namespace XyzAssets.Runtime
 
     internal class OnlineLoadBundleOperatorEx : LoadBundleOperator
     {
-        public OnlineLoadBundleOperatorEx(OnlineAssetsSystemImpl impl, int mainId, int[] bundleInfo) : base(null)
+        public OnlineLoadBundleOperatorEx(OnlineSystemImpl impl, int mainId, int[] bundleInfo) : base(null)
         {
             m_Impl = impl;
             m_WaitBundleInfos = bundleInfo;
@@ -375,7 +363,7 @@ namespace XyzAssets.Runtime
 
         private LoadBundleOperator[] m_LoadBundleOperators;
         private int[] m_WaitBundleInfos;
-        private OnlineAssetsSystemImpl m_Impl;
+        private OnlineSystemImpl m_Impl;
         private int m_MainId;
         private float m_Progress;
     }

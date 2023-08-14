@@ -8,28 +8,20 @@ namespace XyzAssets.Runtime
         public LoadBundleOperator(BundleInfo bundleInfo) : base(false)
         {
             m_BundleInfo = bundleInfo;
-            XyzOperatorSystem.AddAssetOperator(this);
+            OperatorSystem.AddAssetOperator(this);
         }
 
         public event Action<LoadBundleOperator> OnComplete;
-
-        public override EOperatorStatus Status
+        protected override void InvokeCompletion()
         {
-            get => base.Status;
-            protected set
+            if (Status == EOperatorStatus.Succeed)
             {
-                base.Status = value;
-
-                if (OnComplete != null && value == EOperatorStatus.Succeed && !m_IsDisposed)
-                {
-                    OnComplete(this);
-                    OnComplete = null;
-                }
-                if (value == EOperatorStatus.Failed)
-                    XyzLogger.LogError(Error);
+                OnComplete(this);
+                OnComplete = null;
             }
+            else
+                XyzLogger.LogError(Error);
         }
-
         public AssetBundle CachedBundle { get; protected set; }
         protected BundleInfo m_BundleInfo;
     }

@@ -2,7 +2,7 @@
 using System.Diagnostics;
 namespace XyzAssets.Runtime
 {
-    internal class XyzOperatorSystem
+    internal static class OperatorSystem
     {
         internal static bool IsBusy
         {

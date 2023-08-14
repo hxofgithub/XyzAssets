@@ -9,7 +9,7 @@ namespace XyzAssets.Runtime
     }
     internal sealed class OnlineInitializeOperator : InitializeOperator
     {
-        internal OnlineInitializeOperator(OnlineAssetsSystemImpl impl, OnlineInitializeParameters parameters)
+        internal OnlineInitializeOperator(OnlineSystemImpl impl, OnlineInitializeParameters parameters)
         {
             m_OnlineParameters = parameters;
             m_Impl = impl;
@@ -57,9 +57,9 @@ namespace XyzAssets.Runtime
         protected override void OnStart()
         {
             //检测解压路径
-            if (File.Exists(XyzAssetPathHelper.GetFileExternalPath(XyzConfiguration.ManifestName)))
+            if (File.Exists(AssetsPathHelper.GetFileExternalPath(XyzConfiguration.ManifestName)))
             {
-                var binary = File.ReadAllBytes(XyzAssetPathHelper.GetFileExternalPath(XyzConfiguration.ManifestName));
+                var binary = File.ReadAllBytes(AssetsPathHelper.GetFileExternalPath(XyzConfiguration.ManifestName));
                 ProcessManifest(binary);
             }
             else
@@ -119,8 +119,8 @@ namespace XyzAssets.Runtime
             {
                 try
                 {
-                    XyzAssetsRuntimeManifest manifest = ManifestSerialize.DeserializeFromBinary(binary);
-                    var path = XyzAssetPathHelper.GetFileExternalPath(XyzConfiguration.ManifestName);
+                    RuntimeManifest manifest = ManifestSerialize.DeserializeFromBinary(binary);
+                    var path = AssetsPathHelper.GetFileExternalPath(XyzConfiguration.ManifestName);
                     if (!Directory.Exists(Path.GetDirectoryName(path)))
                         Directory.CreateDirectory(Path.GetDirectoryName(path));
 
@@ -139,7 +139,7 @@ namespace XyzAssets.Runtime
 
         private UnityWebRequest m_WebRequestAsync;
         private OnlineInitializeParameters m_OnlineParameters;
-        private OnlineAssetsSystemImpl m_Impl;
+        private OnlineSystemImpl m_Impl;
         private int m_OnlineResIndex;
         private int m_RetryTimes;
     }

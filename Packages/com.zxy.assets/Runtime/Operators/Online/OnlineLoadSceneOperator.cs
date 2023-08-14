@@ -14,7 +14,7 @@ namespace XyzAssets.Runtime
             Done,
         }
 
-        internal OnlineLoadSceneOperator(OnlineAssetsSystemImpl impl, AssetInfo assetInfo, LoadSceneMode sceneMode) : base(assetInfo, sceneMode)
+        internal OnlineLoadSceneOperator(OnlineSystemImpl impl, AssetInfo assetInfo, LoadSceneMode sceneMode) : base(assetInfo, sceneMode)
         {
             m_Impl = impl;
         }
@@ -114,7 +114,7 @@ namespace XyzAssets.Runtime
         private LoadSceneStep m_Step;
         private LoadBundleOperator m_LoadBundleOperator;
         private AsyncOperation m_LoadSceneOpera;
-        private OnlineAssetsSystemImpl m_Impl;
+        private OnlineSystemImpl m_Impl;
 
     }
 }

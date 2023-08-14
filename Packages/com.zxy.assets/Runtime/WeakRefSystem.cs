@@ -2,7 +2,7 @@
 
 namespace XyzAssets.Runtime
 {
-    internal static class XyzWeakRefSystem
+    internal static class WeakRefSystem
     {
         private class WeakRefData
         {

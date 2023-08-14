@@ -6,9 +6,9 @@ namespace XyzAssets.Runtime
     internal static class ManifestSerialize
     {
         #region Deserialize
-        internal static XyzAssetsRuntimeManifest DeserializeFromBinary(byte[] buffer)
+        internal static RuntimeManifest DeserializeFromBinary(byte[] buffer)
         {
-            XyzAssetsRuntimeManifest result;
+            RuntimeManifest result;
 
             using (var ms = new MemoryStream(buffer))
             {
@@ -22,9 +22,9 @@ namespace XyzAssets.Runtime
             return result;
         }
 
-        internal static XyzAssetsRuntimeManifest DeserializeFromReader(BinaryReader reader)
+        internal static RuntimeManifest DeserializeFromReader(BinaryReader reader)
         {
-            XyzAssetsRuntimeManifest inst = new XyzAssetsRuntimeManifest();
+            RuntimeManifest inst = new RuntimeManifest();
             int len = reader.ReadInt32();
             inst.BundleList = new BundleInfo[len];
             for (int i = 0; i < len; i++)
@@ -65,7 +65,7 @@ namespace XyzAssets.Runtime
         #endregion
 
         #region Serialize
-        internal static byte[] SerializeToBinary(XyzAssetsRuntimeManifest manifest)
+        internal static byte[] SerializeToBinary(RuntimeManifest manifest)
         {
             byte[] result;
             using (MemoryStream ms = new MemoryStream())
@@ -82,7 +82,7 @@ namespace XyzAssets.Runtime
             return result;
         }
 
-        internal static void SerializeToWriter(XyzAssetsRuntimeManifest manifest, BinaryWriter writer)
+        internal static void SerializeToWriter(RuntimeManifest manifest, BinaryWriter writer)
         {
             writer.Write(manifest.BundleList.Length);
             for (int i = 0; i < manifest.BundleList.Length; i++)

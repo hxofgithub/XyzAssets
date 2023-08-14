@@ -4,7 +4,7 @@ namespace XyzAssets.Runtime
 {
     internal sealed class OnlineUpdateManifestOperator : UpdateManifestOperator
     {
-        internal OnlineUpdateManifestOperator(OnlineAssetsSystemImpl impl)
+        internal OnlineUpdateManifestOperator(OnlineSystemImpl impl)
         {
             m_Impl = impl;
         }
@@ -13,7 +13,7 @@ namespace XyzAssets.Runtime
         {
             if (m_Manifest != null)
             {
-                System.IO.File.WriteAllBytes(XyzAssetPathHelper.GetFileExternalPath(XyzConfiguration.ManifestName), ManifestSerialize.SerializeToBinary(m_Manifest));
+                System.IO.File.WriteAllBytes(AssetsPathHelper.GetFileExternalPath(XyzConfiguration.ManifestName), ManifestSerialize.SerializeToBinary(m_Manifest));
             }
         }
         protected override void OnDispose()
@@ -47,7 +47,7 @@ namespace XyzAssets.Runtime
                 if (string.IsNullOrEmpty(m_WebRequest.error))
                 {
                     m_Manifest = ManifestSerialize.DeserializeFromBinary(m_WebRequest.downloadHandler.data);
-                    (m_Impl as OnlineAssetsSystemImpl).SetRemoteManifest(m_Manifest);
+                    (m_Impl as OnlineSystemImpl).SetRemoteManifest(m_Manifest);
                     Status = EOperatorStatus.Succeed;
                 }
                 else
@@ -90,10 +90,10 @@ namespace XyzAssets.Runtime
         private int m_CurrentRetryTimes = 0;
         private int m_CurrentUrlIndex = 0;
         private UnityWebRequest m_WebRequest;
-        private OnlineAssetsSystemImpl m_Impl;
+        private OnlineSystemImpl m_Impl;
         private string[] m_ResUrls;
         private int m_MaxRetryTimes;
-        private XyzAssetsRuntimeManifest m_Manifest;
+        private RuntimeManifest m_Manifest;
 
     }
 }

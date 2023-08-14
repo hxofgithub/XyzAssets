@@ -15,20 +15,15 @@ namespace XyzAssets.Runtime
 
         public event Action<BaseLoadAssetOperator> OnComplete;
 
-        public override EOperatorStatus Status
+        protected override void InvokeCompletion()
         {
-            get => base.Status;
-            protected set
+            if (Status == EOperatorStatus.Succeed)
             {
-                base.Status = value;
-                if (OnComplete != null && value == EOperatorStatus.Succeed && !m_IsDisposed)
-                {
-                    OnComplete(this);
-                    OnComplete = null;
-                }
-                if (value == EOperatorStatus.Failed)
-                    XyzLogger.LogError(Error);
+                OnComplete?.Invoke(this);
+                OnComplete = null;
             }
+            else
+                XyzLogger.LogError(Error);
         }
 
         internal AssetInfo m_AssetInfo;
@@ -42,21 +37,15 @@ namespace XyzAssets.Runtime
         public UnityEngine.Object[] AllAssetsObject { get; protected set; }
 
         public event Action<BaseLoadAllAssetsOperator> OnComplete;
-
-        public override EOperatorStatus Status
+        protected override void InvokeCompletion()
         {
-            get => base.Status;
-            protected set
+            if (Status == EOperatorStatus.Succeed)
             {
-                base.Status = value;
-                if (OnComplete != null && value == EOperatorStatus.Succeed)
-                {
-                    OnComplete(this);
-                    OnComplete = null;
-                }
-                if (value == EOperatorStatus.Failed)
-                    XyzLogger.LogError(Error);
+                OnComplete?.Invoke(this);
+                OnComplete = null;
             }
+            else
+                XyzLogger.LogError(Error);
         }
     }
 

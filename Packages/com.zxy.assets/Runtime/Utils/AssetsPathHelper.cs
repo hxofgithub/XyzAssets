@@ -1,7 +1,7 @@
 ﻿using System.IO;
 namespace XyzAssets.Runtime
 {
-    public class XyzAssetPathHelper
+    internal static class AssetsPathHelper
     {
         #region 临时文件路径
         public static string ExternalTempPath

@@ -63,7 +63,7 @@ namespace XyzAssets.Runtime
             }
             else if (_step == EStep.CheckVersion)
             {
-                var version = XyzAssetUtils.CalculateMD5(_filePath);
+                var version = AssetsUtility.CalculateMD5(_filePath);
                 if (version == _version)
                 {
                     Result = EVerifyResult.Succeed;
@@ -84,12 +84,14 @@ namespace XyzAssets.Runtime
 
         public static VerifyTempOpeation Create(string filePath, string version, long fileSize)
         {
-            var element = new VerifyTempOpeation();
-            element._filePath = filePath;
-            element._version = version;
-            element._verifyFileSize = fileSize;
-            element.Result = EVerifyResult.None;
-            element.FileSize = 0;
+            var element = new VerifyTempOpeation
+            {
+                _filePath = filePath,
+                _version = version,
+                _verifyFileSize = fileSize,
+                Result = EVerifyResult.None,
+                FileSize = 0
+            };
             return element;
 
         }

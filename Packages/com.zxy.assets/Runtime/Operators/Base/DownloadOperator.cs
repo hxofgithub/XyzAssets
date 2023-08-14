@@ -24,24 +24,20 @@ namespace XyzAssets.Runtime
 
         public event Action<DownloadOperator> OnComplete;
 
-        public override EOperatorStatus Status
+        protected override void InvokeCompletion()
         {
-            get => base.Status;
-            protected set
+            if (Status == EOperatorStatus.Succeed)
             {
-                base.Status = value;
-                if (OnComplete != null && value == EOperatorStatus.Succeed && !m_IsDisposed)
-                {
-                    OnComplete(this);
-                    OnComplete = null;
-                }
-                if (value == EOperatorStatus.Failed)
-                    XyzLogger.LogError(Error);
+                OnComplete(this);
+                OnComplete = null;
             }
+            else
+                XyzLogger.LogError(Error);
         }
+
         public void BeginDownload()
         {
-            XyzOperatorSystem.AddAssetOperator(this);
+            OperatorSystem.AddAssetOperator(this);
         }
     }
 }

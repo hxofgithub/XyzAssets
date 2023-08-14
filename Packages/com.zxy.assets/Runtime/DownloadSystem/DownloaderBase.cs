@@ -3,39 +3,23 @@ using UnityEngine;
 
 namespace XyzAssets.Runtime
 {
-    internal abstract class DownloaderBase
+    internal abstract class DownloaderBase : AsyncOperationBase
     {
-        public enum EStatus
-        {
-            None = 0,
-            Succeed,
-            Failed
-        }
         public DownloaderBase(BundleInfo info, int retryTimes, int timeout)
         {
             _requestRetryTimes = retryTimes;
             _requestTimeout = timeout;
             BundleInfo = info;
 
-            _tempFilePath = XyzAssetPathHelper.GetTempFilePath(info.BundleName);
+            _tempFilePath = AssetsPathHelper.GetTempFilePath(info.BundleName);
         }
         internal BundleInfo BundleInfo { get; private set; }
-        internal float Progress { get; set; } = 0;
         internal ulong DownloadedBytes { get; set; } = 0;
-
-        internal string Error { get; set; }
         internal long ResponseCode { get; set; }
 
-        public EStatus Status { get; set; }
-
-        public bool IsDone { get { return Status == EStatus.Succeed || Status == EStatus.Failed; } }
-
-
+        protected abstract void Abort();
         internal abstract void SendRequest();
-        internal abstract void Update();
-        internal abstract void Abort();
 
-        internal abstract void Dispose();
         protected void CheckTimeout()
         {
             if (_isAbort)
@@ -63,10 +47,6 @@ namespace XyzAssets.Runtime
             return string.Format(DownloadSystem.ResUrls[index], BundleInfo.BundleName);
         }
 
-        protected void CachingFile(string tempFilePath)
-        {
-
-        }
 
         protected int _requestRetryTimes = 0;
         protected bool _isAbort = false;

@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 namespace XyzAssets.Runtime
 {
-    internal sealed class OnlineAssetsSystemImpl : IAssetsSystemImpl
+    internal sealed class OnlineSystemImpl : IAssetsSystemImpl
     {
         #region public methods
         public void SetBundleWrapFunc(Func<string, string> wrapFunc)
@@ -97,11 +97,11 @@ namespace XyzAssets.Runtime
                 }
             }
         }
-        internal void SetActiveManifest(XyzAssetsRuntimeManifest manifest)
+        internal void SetActiveManifest(RuntimeManifest manifest)
         {
             m_ActiveManifest = manifest;
         }
-        internal void SetRemoteManifest(XyzAssetsRuntimeManifest manifest)
+        internal void SetRemoteManifest(RuntimeManifest manifest)
         {
             m_RemoteManifest = manifest;
         }
@@ -182,7 +182,7 @@ namespace XyzAssets.Runtime
             }
             return null;
         }
-        private BundleInfo[] InternalGetBundleInfosByModeName(XyzAssetsRuntimeManifest manifest, string modeName)
+        private BundleInfo[] InternalGetBundleInfosByModeName(RuntimeManifest manifest, string modeName)
         {
             if (string.IsNullOrEmpty(modeName))
                 return manifest.BundleList;
@@ -220,7 +220,7 @@ namespace XyzAssets.Runtime
                         else
                         {
                             var bundleName = bundle.NameType == BundleFileNameType.BundleName ? bundle.BundleName : bundle.Version;
-                            if (!System.IO.File.Exists(XyzAssetPathHelper.GetFileExternalPath(bundleName)))
+                            if (!System.IO.File.Exists(AssetsPathHelper.GetFileExternalPath(bundleName)))
                                 result.Add(bundle);
                         }
                     }
@@ -273,8 +273,8 @@ namespace XyzAssets.Runtime
 
         #endregion
 
-        private XyzAssetsRuntimeManifest m_ActiveManifest;
-        private XyzAssetsRuntimeManifest m_RemoteManifest;
+        private RuntimeManifest m_ActiveManifest;
+        private RuntimeManifest m_RemoteManifest;
         private readonly Dictionary<int, LoadBundleOperator> m_LoadBundleOperator = new Dictionary<int, LoadBundleOperator>();
         private readonly Dictionary<int, int> m_BundleRef = new Dictionary<int, int>();
         private IPlayModeService m_PlayModeService;

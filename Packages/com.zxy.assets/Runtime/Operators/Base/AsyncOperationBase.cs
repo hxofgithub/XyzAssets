@@ -8,38 +8,17 @@ namespace XyzAssets.Runtime
         public AsyncOperationBase(bool autoAddToOpSystem)
         {
             if (autoAddToOpSystem)
-                XyzOperatorSystem.AddAssetOperator(this);
+                OperatorSystem.AddAssetOperator(this);
         }
 
         public AsyncOperationBase() : this(true) { }
 
-        public event Action<float> OnProgress;
-
         public bool IsDone { get => Status == EOperatorStatus.Succeed || Status == EOperatorStatus.Failed; }
-        public virtual EOperatorStatus Status
-        {
-            get => m_Status;
-            protected set
-            {
-                m_Status = value;
-            }
-        }
+        public EOperatorStatus Status { get; protected set; }
 
         public string Error { get; protected set; }
 
-        public float Progress
-        {
-            get => m_Progress;
-            protected set
-            {
-                if (m_Progress != value)
-                {
-                    m_Progress = value;
-                    OnProgress?.Invoke(value);
-                }
-            }
-        }
-        private float m_Progress;
+        public float Progress { get; protected set; }
 
         public void Dispose()
         {
@@ -52,11 +31,16 @@ namespace XyzAssets.Runtime
         public void Execute()
         {
             if (IsDone) return;
+
             if (m_IsDisposed) return;
+
             if (m_IsStarted)
                 OnExecute();
             else
                 Start();
+
+            if (IsDone)
+                InvokeCompletion();
         }
 
         private void Start()
@@ -73,6 +57,8 @@ namespace XyzAssets.Runtime
         protected abstract void OnExecute();
         protected abstract void OnStart();
 
+        protected virtual void InvokeCompletion() { }
+
         #region IEnumerator
         bool IEnumerator.MoveNext() => !IsDone;
         object IEnumerator.Current => null;
@@ -81,8 +67,7 @@ namespace XyzAssets.Runtime
 
         #endregion
 
-        protected bool m_IsDisposed { get; private set; }
+        private bool m_IsDisposed;
         private bool m_IsStarted;
-        private EOperatorStatus m_Status;
     }
 }

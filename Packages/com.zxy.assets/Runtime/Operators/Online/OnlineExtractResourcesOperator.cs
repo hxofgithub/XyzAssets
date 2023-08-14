@@ -24,7 +24,7 @@ namespace XyzAssets.Runtime
                 {
                     var _bundle = m_BundleInfos[i];
                     var bundleName = _bundle.NameType == BundleFileNameType.Hash ? _bundle.Version : _bundle.BundleName;
-                    if (StreamingAssetsHelper.FileExists(bundleName) && !File.Exists(XyzAssetPathHelper.GetFileExternalPath(bundleName)))
+                    if (StreamingAssetsHelper.FileExists(bundleName) && !File.Exists(AssetsPathHelper.GetFileExternalPath(bundleName)))
                     {
 #if UNITY_ANDROID && !UNITY_EDITOR
                         m_WebRequest = UnityWebRequest.Get(Path.Combine(Application.streamingAssetsPath, bundleName));
@@ -54,7 +54,7 @@ namespace XyzAssets.Runtime
 
                 if (string.IsNullOrEmpty(m_WebRequest.error))
                 {
-                    File.WriteAllBytes(XyzAssetPathHelper.GetFileExternalPath(bundleName), m_WebRequest.downloadHandler.data);
+                    File.WriteAllBytes(AssetsPathHelper.GetFileExternalPath(bundleName), m_WebRequest.downloadHandler.data);
                     m_ExtractIndex++;
 
                     if (m_ExtractIndex == m_BundleInfos.Length)
@@ -91,7 +91,7 @@ namespace XyzAssets.Runtime
                 var bundleName = _bundle.NameType == BundleFileNameType.Hash ? _bundle.Version : _bundle.BundleName;
 
                 var streamingPath = Path.Combine(Application.streamingAssetsPath, bundleName);
-                var externalPath = XyzAssetPathHelper.GetFileExternalPath(bundleName);
+                var externalPath = AssetsPathHelper.GetFileExternalPath(bundleName);
                 if (File.Exists(streamingPath) && !File.Exists(externalPath))
                     File.Copy(streamingPath, externalPath, true);
 

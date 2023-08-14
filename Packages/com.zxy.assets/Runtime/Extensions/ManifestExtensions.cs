@@ -7,10 +7,10 @@ namespace XyzAssets.Runtime
         {
             ThrowIfNull(handler);
             ThrowIfNull(target);
-            XyzWeakRefSystem.AddWeakReference(target, handler);
+            WeakRefSystem.AddWeakReference(target, handler);
         }
 
-        internal static AssetInfo GetAssetInfo(this XyzAssetsRuntimeManifest manifest, string assetPath)
+        internal static AssetInfo GetAssetInfo(this RuntimeManifest manifest, string assetPath)
         {
             ThrowIfNull(manifest);
             ThrowIfNull(manifest.AssetInfoList);
@@ -22,7 +22,7 @@ namespace XyzAssets.Runtime
             }
             return null;
         }
-        internal static BundleInfo GetBundleInfo(this XyzAssetsRuntimeManifest manifest, string bundleName, out int bundleId)
+        internal static BundleInfo GetBundleInfo(this RuntimeManifest manifest, string bundleName, out int bundleId)
         {
             ThrowIfNull(manifest);
             ThrowIfNull(manifest.BundleList);
@@ -38,13 +38,13 @@ namespace XyzAssets.Runtime
             }
             return null;
         }
-        internal static BundleInfo GetBundleInfo(this XyzAssetsRuntimeManifest manifest, int bundleId)
+        internal static BundleInfo GetBundleInfo(this RuntimeManifest manifest, int bundleId)
         {
             ThrowIfNull(manifest);
             ThrowIfNull(manifest.BundleList);
             return manifest.BundleList[bundleId];
         }
-        internal static BundleInfo[] GetModeBundleInfos(this XyzAssetsRuntimeManifest manifest, string[] modeNames)
+        internal static BundleInfo[] GetModeBundleInfos(this RuntimeManifest manifest, string[] modeNames)
         {
             ThrowIfNull(manifest);
             ThrowIfNull(manifest.BundleList);
@@ -60,7 +60,7 @@ namespace XyzAssets.Runtime
             return result.ToArray();
         }
 
-        internal static int GetBundleId(this XyzAssetsRuntimeManifest manifest, BundleInfo bundleInfo)
+        internal static int GetBundleId(this RuntimeManifest manifest, BundleInfo bundleInfo)
         {
             ThrowIfNull(manifest);
             ThrowIfNull(manifest.BundleList);

@@ -26,7 +26,7 @@ namespace XyzAssets.Runtime
         {
             if (maxElapsedMilliseconds < 10)
                 maxElapsedMilliseconds = 10;
-            XyzOperatorSystem.MaxTimeSlice = maxElapsedMilliseconds;
+            OperatorSystem.MaxTimeSlice = maxElapsedMilliseconds;
         }
 
         public static InitializeOperator Initialize(InitializeParameters initializeParameters)
@@ -34,13 +34,13 @@ namespace XyzAssets.Runtime
             if (initializeParameters == null) throw new ArgumentNullException("initializeParameters");
 
             if (initializeParameters is SimulateInitializeParameters)
-                m_Impl = new SimulateAssetsSystemImpl();
+                m_Impl = new SimulateSystemImpl();
             else if (initializeParameters is OnlineInitializeParameters)
-                m_Impl = new OnlineAssetsSystemImpl();
+                m_Impl = new OnlineSystemImpl();
 
             InitializeOperator initializeOperator = m_Impl.Initialize(initializeParameters);
             XyzAssetDriver.TryCreateInstance();
-            XyzOperatorSystem.Initialize();
+            OperatorSystem.Initialize();
             return initializeOperator;
         }
 
@@ -86,12 +86,6 @@ namespace XyzAssets.Runtime
             return m_Impl.LoadAssetsAsync<T>(collection);
         }
 
-        public static XyzAssetGroupLoader CreateGroupLoader()
-        {
-            ThrowImplIsNull();
-            return new XyzAssetGroupLoader();
-        }
-
         public static ExtractResourcesOperator ExtractResources(string extractPath, params string[] modeName)
         {
             ThrowImplIsNull();
@@ -100,14 +94,14 @@ namespace XyzAssets.Runtime
         internal static void Execute()
         {
             if (m_Impl == null) return;
-            XyzOperatorSystem.Execute();
-            XyzWeakRefSystem.Execute();
+            OperatorSystem.Execute();
+            WeakRefSystem.Execute();
         }
 
         internal static void Dispose()
         {
-            XyzOperatorSystem.Dispose();
-            XyzWeakRefSystem.Dispose();
+            OperatorSystem.Dispose();
+            WeakRefSystem.Dispose();
             if (m_Impl != null)
             {
                 m_Impl.Dispose();

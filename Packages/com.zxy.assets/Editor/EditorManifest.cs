@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace XyzAssets.Editor
 {
     [System.Serializable]
-    public class XyzAssetsEditorManifest
+    public class EditorManifest
     {
         public List<EditorBundleInfo> BundleInfos = new List<EditorBundleInfo>();
         public List<EditorAssetInfo> AssetInfos = new List<EditorAssetInfo>();

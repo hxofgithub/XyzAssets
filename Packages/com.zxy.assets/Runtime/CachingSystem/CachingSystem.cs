@@ -1,4 +1,5 @@
-﻿
+﻿using System.IO;
+
 namespace XyzAssets.Runtime
 {
     public enum EVerifyResult
@@ -34,15 +35,25 @@ namespace XyzAssets.Runtime
         Succeed = 1,
     }
 
-    public class CachingSystem
+    internal static class CachingSystem
     {
-        internal static EVerifyResult VerifyTempFile(string path, long fileSize, string version)
+        internal static VerifyTempOpeation VerifyTempFile(string path, long fileSize, string version)
         {
-            return EVerifyResult.Succeed;
+            return VerifyTempOpeation.Create(path, version, fileSize);
         }
 
-        internal static void TryDiscardTempFile(string path) { }
+        internal static void TryDiscardTempFile(string path) 
+        {
+            if (File.Exists(path))
+            {
+                File.Delete(path);
+            }
+        }
 
+        internal static void SaveCachingFile(string tempFilePath)
+        {
+            var filePath = tempFilePath.Replace(AssetsPathHelper.ExternalTempPath, AssetsPathHelper.ExternalPath);
+            File.Move(tempFilePath, filePath);
+        }
     }
-
 }

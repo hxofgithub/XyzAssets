@@ -77,25 +77,25 @@ namespace XyzAssets.Runtime
             }
         }
 
-        protected override void OnDispose()
-        {
-            SceneManager.sceneUnloaded -= SceneManager_sceneUnloaded;
+        //protected override void OnDispose()
+        //{
+        //    SceneManager.sceneUnloaded -= SceneManager_sceneUnloaded;
 
-            m_SceneObject = default;
+        //    m_SceneObject = default;
 
-            m_SceneName = null;
+        //    m_SceneName = null;
 
-            m_LoadBundleOperator = null;
-            m_LoadSceneOpera = null;
+        //    m_LoadBundleOperator = null;
+        //    m_LoadSceneOpera = null;
 
-            if (m_AssetInfo != null)
-            {
-                m_Impl.UnLoadBundle(m_AssetInfo);
-                m_AssetInfo = null;
-            }
-            m_Step = LoadSceneStep.None;
-            m_Impl = null;
-        }
+        //    if (m_AssetInfo != null)
+        //    {
+        //        m_Impl.UnLoadBundle(m_AssetInfo);
+        //        m_AssetInfo = null;
+        //    }
+        //    m_Step = LoadSceneStep.None;
+        //    m_Impl = null;
+        //}
 
         protected override void OnStart()
         {
@@ -106,7 +106,7 @@ namespace XyzAssets.Runtime
         {
             if (arg0.name == m_SceneName)
             {
-                Dispose();
+                //Dispose();
             }
         }
 

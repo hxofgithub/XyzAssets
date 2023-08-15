@@ -20,10 +20,10 @@ namespace XyzAssets.Runtime
         public long FileSize { get; private set; } = 0;
 
         private EStep _step = EStep.None;
-        protected override void OnDispose()
-        {
-            _step = EStep.None;
-        }
+        //protected override void OnDispose()
+        //{
+        //    _step = EStep.None;
+        //}
 
         protected override void OnExecute()
         {

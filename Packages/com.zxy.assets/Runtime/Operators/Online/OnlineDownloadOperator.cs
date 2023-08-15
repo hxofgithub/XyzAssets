@@ -126,19 +126,19 @@ namespace XyzAssets.Runtime
             }
 
         }
-        protected override void OnDispose()
-        {
-            if (m_WebRequest != null)
-            {
-                m_WebRequest.Abort();
-                m_WebRequest.Dispose();
-                m_WebRequest = null;
-            }
-            m_ResUrls = null;
-            m_BundleInfos = null;
-            m_Impl = null;
-            m_Step = DownloadStep.None;
-        }
+        //protected override void OnDispose()
+        //{
+        //    if (m_WebRequest != null)
+        //    {
+        //        m_WebRequest.Abort();
+        //        m_WebRequest.Dispose();
+        //        m_WebRequest = null;
+        //    }
+        //    m_ResUrls = null;
+        //    m_BundleInfos = null;
+        //    m_Impl = null;
+        //    m_Step = DownloadStep.None;
+        //}
 
         private BundleInfo[] m_BundleInfos;
         private int m_CurrentResUrlIndex, m_RetryTimes;

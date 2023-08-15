@@ -23,11 +23,6 @@ namespace XyzAssets.Runtime
 #endif
         }
 
-        protected override void OnDispose()
-        {
-            AssetObject = null;
-        }
-
         protected override void OnStart()
         {
 

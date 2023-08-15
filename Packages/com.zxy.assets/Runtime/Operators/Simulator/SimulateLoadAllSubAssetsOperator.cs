@@ -52,17 +52,19 @@ namespace XyzAssets.Runtime
 #endif
         }
 
-        protected override void OnDispose()
-        {
+        //        protected override void OnDispose()
+        //        {
 
-#if UNITY_EDITOR
-            if (m_WaitLoadValuPairs != null)
-                m_WaitLoadValuPairs.Clear();
-            m_WaitLoadValuPairs = null;
+        //#if UNITY_EDITOR
+        //            if (m_WaitLoadValuPairs != null)
+        //                m_WaitLoadValuPairs.Clear();
+        //            m_WaitLoadValuPairs = null;
 
-            AllAssetsObject = null;
-#endif
-        }
+        //            AllAssetsObject = null;
+
+        //            UnityEditor.EditorUtility.UnloadUnusedAssetsImmediate();
+        //#endif
+        //        }
 
         protected override void OnStart()
         {

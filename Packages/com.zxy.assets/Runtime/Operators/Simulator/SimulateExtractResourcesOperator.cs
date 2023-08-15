@@ -18,11 +18,6 @@ namespace XyzAssets.Runtime
         {
             Status = EOperatorStatus.Succeed;
         }
-
-        protected override void OnDispose()
-        {
-
-        }
     }
 
 }

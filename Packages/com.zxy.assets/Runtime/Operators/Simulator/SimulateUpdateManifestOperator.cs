@@ -2,10 +2,6 @@
 {
     internal sealed class SimulateUpdateManifestOperator : UpdateManifestOperator
     {
-        protected override void OnDispose()
-        {
-
-        }
 
         protected override void OnExecute()
         {

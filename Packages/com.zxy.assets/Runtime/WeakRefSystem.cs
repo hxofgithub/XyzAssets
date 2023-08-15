@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-
+using System;
 namespace XyzAssets.Runtime
 {
     internal static class WeakRefSystem
@@ -7,10 +7,10 @@ namespace XyzAssets.Runtime
         private class WeakRefData
         {
             internal UnityEngine.Object holder;
-            internal AsyncOperationBase tartget;
+            internal BundleProviderBase tartget;
         }
 
-        internal static void AddWeakReference(UnityEngine.Object holder, AsyncOperationBase target)
+        internal static void AddWeakReference(UnityEngine.Object holder, BundleProviderBase target)
         {
             m_WeakReferences.Add(new WeakRefData() { holder = holder, tartget = target });
         }

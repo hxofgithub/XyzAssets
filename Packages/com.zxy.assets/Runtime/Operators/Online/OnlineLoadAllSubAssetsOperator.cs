@@ -60,29 +60,29 @@ namespace XyzAssets.Runtime
             }
         }
 
-        protected override void OnDispose()
-        {
+        //protected override void OnDispose()
+        //{
 
-            if (m_WaitLoadValuPairs != null)
-                m_WaitLoadValuPairs.Clear();
-            m_WaitLoadValuPairs = null;
+        //    if (m_WaitLoadValuPairs != null)
+        //        m_WaitLoadValuPairs.Clear();
+        //    m_WaitLoadValuPairs = null;
 
-            if (m_LoadedOperatorQueue != null)
-            {
-                while (m_LoadedOperatorQueue.Count > 0)
-                {
-                    var op = m_LoadedOperatorQueue.Dequeue();
-                    op.Dispose();
-                }
-                m_LoadedOperatorQueue = null;
-            }
+        //    if (m_LoadedOperatorQueue != null)
+        //    {
+        //        while (m_LoadedOperatorQueue.Count > 0)
+        //        {
+        //            var op = m_LoadedOperatorQueue.Dequeue();
+        //            op.Dispose();
+        //        }
+        //        m_LoadedOperatorQueue = null;
+        //    }
 
-            AllAssetsObject = null;
+        //    AllAssetsObject = null;
 
-            m_LoadAssetOpera = null;
+        //    m_LoadAssetOpera = null;
 
-            m_Impl = null;
-        }
+        //    m_Impl = null;
+        //}
 
         protected override void OnStart()
         {

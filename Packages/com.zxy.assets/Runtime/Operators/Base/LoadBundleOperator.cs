@@ -1,13 +1,17 @@
 ﻿using System;
-using UnityEngine;
 
 namespace XyzAssets.Runtime
 {
     internal abstract class LoadBundleOperator : AsyncOperationBase
     {
-        public LoadBundleOperator(BundleInfo bundleInfo) : base(false)
+        internal int MainBundleId { get; }
+
+        protected bool _mAsync;
+
+        public LoadBundleOperator(int bundleId, bool async = true) : base(false)
         {
-            m_BundleInfo = bundleInfo;
+            MainBundleId = bundleId;
+            _mAsync = async;
             OperatorSystem.AddAssetOperator(this);
         }
 
@@ -16,14 +20,13 @@ namespace XyzAssets.Runtime
         {
             if (Status == EOperatorStatus.Succeed)
             {
-                OnComplete(this);
+                OnComplete?.Invoke(this);
                 OnComplete = null;
             }
             else
                 XyzLogger.LogError(Error);
         }
-        public AssetBundle CachedBundle { get; protected set; }
-        protected BundleInfo m_BundleInfo;
+
     }
 
 }

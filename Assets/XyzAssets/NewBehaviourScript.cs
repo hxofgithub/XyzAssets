@@ -10,8 +10,8 @@ public class NewBehaviourScript : MonoBehaviour
     IEnumerator Start()
     {
         XyzAssets.Runtime.InitializeParameters initialize = new XyzAssets.Runtime.OnlineInitializeParameters();
-        initialize.PlayModeService = new PlayModeService();
-        using var op = XyzAssets.Runtime.XyzAsset.Initialize(initialize);
+        //initialize.PlayModeService = new PlayModeService();
+        var op = XyzAssets.Runtime.XyzAsset.Initialize(initialize);
         yield return op;
         if (op.Status == EOperatorStatus.Succeed)
         {

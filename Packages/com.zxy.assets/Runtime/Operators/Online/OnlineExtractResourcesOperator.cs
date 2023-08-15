@@ -104,18 +104,18 @@ namespace XyzAssets.Runtime
             }
         }
 
-        protected override void OnDispose()
-        {
-            if (m_WebRequest != null)
-            {
-                m_WebRequest.Abort();
-                m_WebRequest.Dispose();
-                m_WebRequest = null;
-            }
+        //protected override void OnDispose()
+        //{
+        //    if (m_WebRequest != null)
+        //    {
+        //        m_WebRequest.Abort();
+        //        m_WebRequest.Dispose();
+        //        m_WebRequest = null;
+        //    }
 
-            m_BundleInfos = null;
-            m_ExtractRootPath = null;
-        }
+        //    m_BundleInfos = null;
+        //    m_ExtractRootPath = null;
+        //}
 
 
         private int m_ExtractIndex = 0;

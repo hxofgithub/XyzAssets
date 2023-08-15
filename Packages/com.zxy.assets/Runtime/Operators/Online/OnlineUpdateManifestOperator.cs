@@ -16,20 +16,20 @@ namespace XyzAssets.Runtime
                 System.IO.File.WriteAllBytes(AssetsPathHelper.GetFileExternalPath(XyzConfiguration.ManifestName), ManifestSerialize.SerializeToBinary(m_Manifest));
             }
         }
-        protected override void OnDispose()
-        {
-            m_Impl = null;
-            if (m_WebRequest != null)
-            {
-                m_WebRequest.Abort();
-                m_WebRequest.Dispose();
-                m_WebRequest = null;
-            }
+        //protected override void OnDispose()
+        //{
+        //    m_Impl = null;
+        //    if (m_WebRequest != null)
+        //    {
+        //        m_WebRequest.Abort();
+        //        m_WebRequest.Dispose();
+        //        m_WebRequest = null;
+        //    }
 
-            m_Manifest = null;
+        //    m_Manifest = null;
 
-            m_ResUrls = null;
-        }
+        //    m_ResUrls = null;
+        //}
 
         protected override void OnExecute()
         {

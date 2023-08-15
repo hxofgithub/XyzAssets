@@ -32,8 +32,6 @@ namespace XyzAssets.Runtime
         public InitializeOperator Initialize(InitializeParameters initializeParameters)
         {
             var onlineParams = initializeParameters as OnlineInitializeParameters;
-            m_PlayModeService = onlineParams.PlayModeService;
-            m_GameDecryptService = onlineParams.DecryptService;
             var op = new OnlineInitializeOperator(this, onlineParams);
             return op;
         }
@@ -69,8 +67,6 @@ namespace XyzAssets.Runtime
             m_RemoteManifest = null;
             m_ActiveManifest = null;
             m_PlayModeService = null;
-            m_GameDecryptService = null;
-
             XyzLogger.Log("OnlineAssetsSystemImpl Dispose");
         }
 
@@ -81,10 +77,6 @@ namespace XyzAssets.Runtime
         internal IPlayModeService GetModeService()
         {
             return m_PlayModeService;
-        }
-        internal IGameDecryptService GetDecryptService()
-        {
-            return m_GameDecryptService;
         }
 
         internal void UnLoadBundle(AssetInfo assetInfo)
@@ -106,15 +98,6 @@ namespace XyzAssets.Runtime
             m_RemoteManifest = manifest;
         }
 
-        internal AssetBundle GetBundle(int bundleId)
-        {
-            var newBundleName = GetBundleWrapName(bundleId);
-            GetActiveBundleInfo(newBundleName, out int newBundleId);
-
-            if (m_LoadBundleOperator.ContainsKey(newBundleId))
-                return m_LoadBundleOperator[newBundleId].CachedBundle;
-            return null;
-        }
         internal LoadBundleOperator LoadBundle(int bundleId)
         {
             var newBundleName = GetBundleWrapName(bundleId);
@@ -126,14 +109,14 @@ namespace XyzAssets.Runtime
                 return m_LoadBundleOperator[newBundleId];
             }
 
-            var op = new OnlineLoadBundleOperator(this, newBundleInfo);
+            var op = new OnlineLoadBundleOperator(newBundleId, true);
             m_LoadBundleOperator.Add(newBundleId, op);
             m_BundleRef[newBundleId] = 1;
             return op;
         }
         internal LoadBundleOperator LoadBundle(AssetInfo assetInfo)
         {
-            return new OnlineLoadBundleOperatorEx(this, assetInfo.MainId, assetInfo.Dependencies);
+            return null;
         }
 
         #endregion
@@ -241,7 +224,6 @@ namespace XyzAssets.Runtime
                     {
                         m_LoadBundleOperator.Remove(bundleId);
                         m_BundleRef.Remove(bundleId);
-                        op.Dispose();
                     }
                 }
                 else if (op.Status == EOperatorStatus.None)
@@ -257,7 +239,6 @@ namespace XyzAssets.Runtime
                                 var _op = m_LoadBundleOperator[_id];
                                 m_LoadBundleOperator.Remove(_id);
                                 m_BundleRef.Remove(_id);
-                                op.Dispose();
                             }
                         }
                     };
@@ -278,7 +259,6 @@ namespace XyzAssets.Runtime
         private readonly Dictionary<int, LoadBundleOperator> m_LoadBundleOperator = new Dictionary<int, LoadBundleOperator>();
         private readonly Dictionary<int, int> m_BundleRef = new Dictionary<int, int>();
         private IPlayModeService m_PlayModeService;
-        private IGameDecryptService m_GameDecryptService;
 
         private Func<string, string> m_BundleWrapFunc;
 

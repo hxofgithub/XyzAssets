@@ -27,6 +27,8 @@ namespace XyzAssets.Runtime
         /// </summary>
         public string ModeName;
 
+        public ulong Offset;
+
         /// <summary>
         /// 加密方式
         /// </summary>

@@ -7,7 +7,7 @@ namespace XyzAssets.Runtime
         {
             ThrowIfNull(handler);
             ThrowIfNull(target);
-            WeakRefSystem.AddWeakReference(target, handler);
+            //WeakRefSystem.AddWeakReference(target, handler);
         }
 
         internal static AssetInfo GetAssetInfo(this RuntimeManifest manifest, string assetPath)

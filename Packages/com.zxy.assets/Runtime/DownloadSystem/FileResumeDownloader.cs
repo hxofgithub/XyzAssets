@@ -28,7 +28,7 @@ namespace XyzAssets.Runtime
 
         protected override void OnStart()
         {
-            
+
         }
 
         internal override void SendRequest()
@@ -210,14 +210,14 @@ namespace XyzAssets.Runtime
             _webRequest = null;
         }
 
-        protected override void OnDispose()
-        {
-            if (_webRequest != null)
-            {
-                _webRequest.Dispose();
-                _webRequest = null;
-            }
-        }
+        //protected override void OnDispose()
+        //{
+        //    if (_webRequest != null)
+        //    {
+        //        _webRequest.Dispose();
+        //        _webRequest = null;
+        //    }
+        //}
 
         private VerifyTempOpeation _verifyOpera;
         private UnityWebRequest _webRequest;

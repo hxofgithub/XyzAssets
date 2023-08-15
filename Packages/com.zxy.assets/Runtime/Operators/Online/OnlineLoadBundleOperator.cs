@@ -1,6 +1,5 @@
 ﻿using System.IO;
 using UnityEngine;
-using UnityEngine.Networking;
 
 namespace XyzAssets.Runtime
 {
@@ -10,362 +9,159 @@ namespace XyzAssets.Runtime
         {
             None,
 
-            DownloadFromRemote,
+            VerifyExternal,
+            LoadFromExternal,
 
-            WaitAssetBundleRequest,
+            VerifyStreaming,
+            LoadFromStreaming,
 
-            ExtractFormStreamingAssetPath,
+            WaitLoadCompletion,
         }
 
-        internal OnlineLoadBundleOperator(OnlineSystemImpl impl, BundleInfo bundleInfo) : base(bundleInfo)
+        internal OnlineLoadBundleOperator(int bundleId, bool async) : base(bundleId, async)
         {
-            m_Impl = impl;
-            m_Step = EStep.None;
-
         }
-        protected override void OnDispose()
-        {
-            XyzLogger.LogWarning(StringUtility.Format("-------[UnLoad Bundle]: {0}", m_BundleInfo.BundleName));
-
-            if (m_AsyncRequest != null)
-            {
-                m_AsyncRequest.Abort();
-                m_AsyncRequest.Dispose();
-                m_AsyncRequest = null;
-            }
-
-            if (m_Stream != null)
-            {
-                m_Stream.Close();
-                m_Stream.Dispose();
-                m_Stream = null;
-            }
-
-            if (CachedBundle != null)
-            {
-                CachedBundle.Unload(true);
-                CachedBundle = null;
-            }
-
-            if (m_DownloadOperator != null)
-            {
-                m_DownloadOperator.Dispose();
-                m_DownloadOperator = null;
-            }
-
-            m_Impl = null;
-        }
-
         protected override void OnExecute()
         {
-            if (m_Step == EStep.ExtractFormStreamingAssetPath)
+            if (_step == EStep.VerifyExternal)
             {
-                if (m_ExtractOpera == null) return;
-
-                Progress = m_ExtractOpera.Progress * .5f;
-
-                if (!m_ExtractOpera.IsDone) return;
-
-                if (m_ExtractOpera.Status == EOperatorStatus.Succeed)
-                {
-                    m_Step = EStep.WaitAssetBundleRequest;
-                }
+                if (VerifyExternal())
+                    _step = EStep.LoadFromExternal;
+                else
+                    _step = EStep.VerifyStreaming;
+            }
+            else if (_step == EStep.LoadFromExternal)
+            {
+                LoadBundle(AssetsPathHelper.ExternalPath);
+            }
+            else if (_step == EStep.VerifyStreaming)
+            {
+                if (VerifyStreaming())
+                    _step = EStep.LoadFromStreaming;
                 else
                 {
-                    Error = m_ExtractOpera.Error;
+                    //
+                    Error = "Load bundle error. File did not found. " + _mBundleName;
                     Status = EOperatorStatus.Failed;
+                    InvokeCompletion();
                 }
-                m_ExtractOpera.Dispose();
-                m_ExtractOpera = null;
             }
-            else if (m_Step == EStep.DownloadFromRemote)
+            else if (_step == EStep.LoadFromStreaming)
             {
-                if (m_DownloadOperator == null) return;
-                Progress = m_DownloadOperator.Progress * .5f;
-                if (!m_DownloadOperator.IsDone) return;
-
-                if (m_DownloadOperator.Status == EOperatorStatus.Succeed)
+                LoadBundle(Application.streamingAssetsPath);
+            }
+            else if (_step == EStep.WaitLoadCompletion)
+            {
+                Progress = _mRequest.progress;
+                if (!_mRequest.isDone) return;
+                if (_mRequest.assetBundle == null)
                 {
-                    m_Step = EStep.WaitAssetBundleRequest;
-                }
-                else
-                {
-                    Error = m_DownloadOperator.Error;
-                    m_Step = EStep.None;
+                    Error = "Load Bundle error.";
                     Status = EOperatorStatus.Failed;
-                }
-                m_DownloadOperator = null;
-            }
-            else if (m_Step == EStep.WaitAssetBundleRequest)
-            {
-                if (CachedBundle == null)
-                    LoadAssetBundleFromExternal();
-            }
-        }
-
-        protected override void OnStart()
-        {
-            m_Step = EStep.None;
-
-            var bundleName = m_BundleInfo.NameType == BundleFileNameType.Hash ? m_BundleInfo.Version : m_BundleInfo.BundleName;
-            //cached ?
-            if (!File.Exists(AssetsPathHelper.GetFileExternalPath(bundleName)))
-            {
-
-                if (!StreamingAssetsHelper.FileExists(bundleName))
-                {
-                    m_Step = EStep.DownloadFromRemote;
-                    m_DownloadOperator = new OnlineDownloadOperator(m_Impl, new BundleInfo[] { m_BundleInfo });
+                    InvokeCompletion();
                 }
                 else
                 {
-                    LoadAssetBundleFromStreamingAssets();
-                }
-            }
-            else
-            {
-                LoadAssetBundleFromExternal();
-            }
-        }
-
-        private void LoadAssetBundleFromExternal()
-        {
-            var bundleName = m_BundleInfo.NameType == BundleFileNameType.Hash ? m_BundleInfo.Version : m_BundleInfo.BundleName;
-            var filePath = AssetsPathHelper.GetFileExternalPath(bundleName);
-
-            //XyzLogger.Log($"----LoadAssetBundleFromExternal---: Name:{m_BundleInfo.BundleName}  Version:{m_BundleInfo.Version}--");
-
-            if (m_BundleInfo.EncryptType == BundleEncryptType.FileOffset)
-            {
-                CachedBundle = AssetBundle.LoadFromFile(filePath, m_BundleInfo.Crc, (ulong)m_Impl.GetDecryptService().GetFileOffset(filePath));
-                if (CachedBundle == null)
-                {
-                    Error = StringUtility.Format("Can load assetbundle form {0}", filePath);
-                    Status = EOperatorStatus.Failed;
-                }
-                else
-                {
+                    BundleSystem.AddAssetBundle(MainBundleId, _mRequest.assetBundle);
                     Status = EOperatorStatus.Succeed;
-                }
-
-                m_Step = EStep.None;
-            }
-            else if (m_BundleInfo.EncryptType == BundleEncryptType.Stream)
-            {
-                m_Stream = m_Impl.GetDecryptService().GetDecryptStream(filePath);
-                CachedBundle = AssetBundle.LoadFromStream(m_Stream, m_BundleInfo.Crc);
-                if (CachedBundle == null)
-                {
-                    Error = StringUtility.Format("Can load assetbundle form {0}", filePath);
-                    Status = EOperatorStatus.Failed;
-                }
-                else
-                {
-                    Status = EOperatorStatus.Succeed;
-                }
-
-                m_Step = EStep.None;
-            }
-            else
-            {
-                CachedBundle = AssetBundle.LoadFromFile(filePath, m_BundleInfo.Crc);
-                if (CachedBundle == null)
-                {
-                    Error = StringUtility.Format("Can load assetbundle form {0}", filePath);
-                    Status = EOperatorStatus.Failed;
-                }
-                else
-                {
-                    Status = EOperatorStatus.Succeed;
+                    InvokeCompletion();
                 }
             }
         }
 
-        private void LoadAssetBundleFromStreamingAssets()
+        private bool VerifyExternal()
         {
-
-            var bundleName = m_BundleInfo.NameType == BundleFileNameType.Hash ? m_BundleInfo.Version : m_BundleInfo.BundleName;
-            var filePath = Path.Combine(Application.streamingAssetsPath, bundleName);
-
-            //XyzLogger.Log($"----LoadAssetBundleFromStreamingAssets---:{filePath}");
-
-            if (Application.platform == RuntimePlatform.Android)
-            {
-                m_ExtractOpera = new AndriodExtractToExtenalFromStreamingAssets(bundleName);
-                m_Step = EStep.ExtractFormStreamingAssetPath;
-            }
+            if (File.Exists(AssetsPathHelper.GetFileExternalPath(_mBundleName)))
+                return true;
             else
+                return false;
+        }
+
+        private bool VerifyStreaming()
+        {
+            if (StreamingAssetsHelper.FileExists(_mBundleName))
+                return true;
+            else
+                return false;
+        }
+
+
+        private void LoadBundle(string bundleRoot)
+        {
+            var bundlePath = Path.Combine(bundleRoot, _mBundleName);
+            if (_mBundleInfo.EncryptType == BundleEncryptType.None || _mBundleInfo.EncryptType == BundleEncryptType.FileOffset)
             {
-                if (m_BundleInfo.EncryptType == BundleEncryptType.FileOffset)
+                if (_mAsync)
                 {
-                    CachedBundle = AssetBundle.LoadFromFile(filePath, m_BundleInfo.Crc, (ulong)m_Impl.GetDecryptService().GetFileOffset(filePath));
-                    if (CachedBundle == null)
+                    _mRequest = AssetBundle.LoadFromFileAsync(bundlePath, _mBundleInfo.Crc, _mBundleInfo.Offset);
+                    _step = EStep.WaitLoadCompletion;
+                }
+                else
+                {
+                    var bundle = AssetBundle.LoadFromFile(bundlePath, _mBundleInfo.Crc, _mBundleInfo.Offset);
+                    if (bundle == null)
                     {
-                        Error = StringUtility.Format("Can load assetbundle form {0}", filePath);
+                        Error = $"Load Bundle error. path:{bundlePath} crc:{_mBundleInfo.Crc}";
                         Status = EOperatorStatus.Failed;
+                        InvokeCompletion();
                     }
                     else
                     {
+                        BundleSystem.AddAssetBundle(MainBundleId, bundle);
                         Status = EOperatorStatus.Succeed;
+                        InvokeCompletion();
                     }
                 }
-                else if (m_BundleInfo.EncryptType == BundleEncryptType.Stream)
+            }
+            else if (_mBundleInfo.EncryptType == BundleEncryptType.Stream)
+            {
+                if (_mAsync)
                 {
-                    m_Stream = m_Impl.GetDecryptService().GetDecryptStream(filePath);
-                    CachedBundle = AssetBundle.LoadFromStream(m_Stream, m_BundleInfo.Crc);
-                    if (CachedBundle == null)
-                    {
-                        Error = StringUtility.Format("Can load assetbundle form {0}", filePath);
-                        Status = EOperatorStatus.Failed;
-                    }
-                    else
-                    {
-                        Status = EOperatorStatus.Succeed;
-                    }
+                    var stream = BundleStreamManager.GetStream(bundlePath);
+                    _mRequest = AssetBundle.LoadFromStreamAsync(stream, _mBundleInfo.Crc);
+                    _step = EStep.WaitLoadCompletion;
                 }
                 else
                 {
-                    CachedBundle = AssetBundle.LoadFromFile(filePath, m_BundleInfo.Crc);
-                    if (CachedBundle == null)
+
+                    var stream = BundleStreamManager.GetStream(bundlePath);
+                    var bundle = AssetBundle.LoadFromStream(stream, _mBundleInfo.Crc);
+                    if (bundle == null)
                     {
-                        Error = StringUtility.Format("Can load assetbundle form {0}", filePath);
+                        Error = $"Load Bundle error. path:{bundlePath} crc:{_mBundleInfo.Crc}";
                         Status = EOperatorStatus.Failed;
+                        InvokeCompletion();
                     }
                     else
                     {
+                        BundleSystem.AddAssetBundle(MainBundleId, bundle);
                         Status = EOperatorStatus.Succeed;
+                        InvokeCompletion();
                     }
                 }
             }
         }
 
-        private OnlineSystemImpl m_Impl;
-        private Stream m_Stream;
-        private EStep m_Step;
-
-        private UnityWebRequest m_AsyncRequest;
-        private DownloadOperator m_DownloadOperator;
-        private AndriodExtractToExtenalFromStreamingAssets m_ExtractOpera;
-
-        private class AndriodExtractToExtenalFromStreamingAssets : AsyncOperationBase
+        protected override void InvokeCompletion()
         {
-            public AndriodExtractToExtenalFromStreamingAssets(string fileName)
-            {
-                m_FileName = fileName;
-            }
-
-            protected override void OnDispose()
-            {
-                if (m_WebRequest != null)
-                {
-                    m_WebRequest.Abort();
-                    m_WebRequest.Dispose();
-                    m_WebRequest = null;
-                }
-            }
-
-            protected override void OnExecute()
-            {
-                Progress = m_WebRequest.downloadProgress;
-                if (!m_WebRequest.isDone) return;
-                if (string.IsNullOrEmpty(m_WebRequest.error))
-                {
-                    File.WriteAllBytes(AssetsPathHelper.GetFileExternalPath(m_FileName), m_WebRequest.downloadHandler.data);
-                    Status = EOperatorStatus.Succeed;
-                }
-                else
-                {
-                    Error = m_WebRequest.error;
-                    Status = EOperatorStatus.Failed;
-                }
-            }
-
-            protected override void OnStart()
-            {
-                m_WebRequest = UnityWebRequest.Get(Path.Combine(Application.streamingAssetsPath, m_FileName));
-                m_WebRequest.disposeDownloadHandlerOnDispose = true;
-                m_WebRequest.SendWebRequest();
-            }
-
-            private UnityWebRequest m_WebRequest;
-            private readonly string m_FileName;
-
-        }
-    }
-
-    internal class OnlineLoadBundleOperatorEx : LoadBundleOperator
-    {
-        public OnlineLoadBundleOperatorEx(OnlineSystemImpl impl, int mainId, int[] bundleInfo) : base(null)
-        {
-            m_Impl = impl;
-            m_WaitBundleInfos = bundleInfo;
-            m_MainId = mainId;
-        }
-
-        protected override void OnDispose()
-        {
-            m_Impl = null;
-            m_WaitBundleInfos = null;
-            m_LoadBundleOperators = null;
-
-            m_MainId = -1;
-
-            CachedBundle = null;
-        }
-
-        protected override void OnExecute()
-        {
-            if (m_LoadBundleOperators.Length == 0) return;
-            m_Progress = 0;
-            bool _isDone = true;
-            for (int i = 0; i < m_LoadBundleOperators.Length; i++)
-            {
-                m_Progress += m_LoadBundleOperators[i].Progress;
-                if (!m_LoadBundleOperators[i].IsDone)
-                    _isDone = false;
-            }
-            Progress = m_Progress / m_LoadBundleOperators.Length;
-
-            if (!_isDone) return;
-
-            var _state = EOperatorStatus.Succeed;
-            for (int i = 0; i < m_LoadBundleOperators.Length; i++)
-            {
-                if (m_LoadBundleOperators[i].Status == EOperatorStatus.Failed)
-                {
-                    _state = EOperatorStatus.Failed;
-                    Error = m_LoadBundleOperators[i].Error;
-                    break;
-                }
-            }
-
-            if (_state == EOperatorStatus.Succeed)
-                CachedBundle = m_Impl.GetBundle(m_MainId);
-            Status = _state;
+            base.InvokeCompletion();
+            _mRequest = null;
+            _mBundleInfo = null;
+            _mBundleName = null;
 
         }
 
         protected override void OnStart()
         {
-            if (m_WaitBundleInfos == null || m_WaitBundleInfos.Length == 0)
-            {
-                Status = EOperatorStatus.Succeed;
-            }
-            else
-            {
-                m_LoadBundleOperators = new LoadBundleOperator[m_WaitBundleInfos.Length];
-                for (int i = 0; i < m_WaitBundleInfos.Length; i++)
-                {
-                    m_LoadBundleOperators[i] = m_Impl.LoadBundle(m_WaitBundleInfos[i]);
-                }
-            }
+            _mBundleInfo = AssetSystem.GetBundleInfo(MainBundleId);
+            _mBundleName = _mBundleInfo.NameType == BundleFileNameType.BundleName ? _mBundleInfo.BundleName : _mBundleInfo.Version;
+            _step = EStep.VerifyExternal;
         }
 
-        private LoadBundleOperator[] m_LoadBundleOperators;
-        private int[] m_WaitBundleInfos;
-        private OnlineSystemImpl m_Impl;
-        private int m_MainId;
-        private float m_Progress;
-    }
 
+        private EStep _step = EStep.None;
+        private string _mBundleName;
+        private AssetBundleCreateRequest _mRequest;
+        private BundleInfo _mBundleInfo;
+    }
 }

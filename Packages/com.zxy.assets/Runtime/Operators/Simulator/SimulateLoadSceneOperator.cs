@@ -67,17 +67,17 @@ namespace XyzAssets.Runtime
 
         }
 
-        protected override void OnDispose()
-        {
-#if UNITY_EDITOR
-            m_AssetInfo = null;
-            m_SceneName = null;
+        //        protected override void OnDispose()
+        //        {
+        //#if UNITY_EDITOR
+        //            m_AssetInfo = null;
+        //            m_SceneName = null;
 
-            m_LoadSceneOpera = null;
-            m_SceneObject = default;
-            m_Step = LoadSceneStep.None;
-#endif
-        }
+        //            m_LoadSceneOpera = null;
+        //            m_SceneObject = default;
+        //            m_Step = LoadSceneStep.None;
+        //#endif
+        //        }
 
         protected override void OnStart()
         {

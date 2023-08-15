@@ -95,18 +95,18 @@ namespace XyzAssets.Runtime
                 }
             }
         }
-        protected override void OnDispose()
-        {
-            if (m_WebRequestAsync != null)
-            {
-                m_WebRequestAsync.Abort();
-                m_WebRequestAsync.Dispose();
-                m_WebRequestAsync = null;
-            }
-            m_OnlineParameters = null;
+        //protected override void OnDispose()
+        //{
+        //    if (m_WebRequestAsync != null)
+        //    {
+        //        m_WebRequestAsync.Abort();
+        //        m_WebRequestAsync.Dispose();
+        //        m_WebRequestAsync = null;
+        //    }
+        //    m_OnlineParameters = null;
 
-            m_Impl = null;
-        }
+        //    m_Impl = null;
+        //}
 
         private void ProcessManifest(byte[] binary)
         {

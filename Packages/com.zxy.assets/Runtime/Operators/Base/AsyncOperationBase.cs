@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 
 namespace XyzAssets.Runtime
 {
-    public abstract class AsyncOperationBase : IEnumerator, IDisposable
+    public abstract class AsyncOperationBase : IEnumerator
     {
         public AsyncOperationBase(bool autoAddToOpSystem)
         {
@@ -20,14 +19,6 @@ namespace XyzAssets.Runtime
 
         public float Progress { get; protected set; }
 
-        public void Dispose()
-        {
-            if (!m_IsDisposed)
-            {
-                m_IsDisposed = true;
-                OnDispose();
-            }
-        }
         public void Execute()
         {
             if (IsDone) return;
@@ -52,8 +43,6 @@ namespace XyzAssets.Runtime
             OnStart();
         }
 
-
-        protected abstract void OnDispose();
         protected abstract void OnExecute();
         protected abstract void OnStart();
 
